@@ -2,10 +2,5 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "/geometrie-pour-architectes/",
-  esbuild: {
-    supported: {
-      "top-level-await": true,
-    },
-  },
+  base: "/geometrie-pour-architectes/"
 });
