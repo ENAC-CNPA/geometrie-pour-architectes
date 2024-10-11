@@ -34,10 +34,10 @@ async function main() {
 
   /**Run custom extensions */
   viewer.on(ViewerEvent.LoadComplete, async () => {
-    menu.addMenu();
+    /* menu.addMenu();
     sets.addSets(filtering);
     nominations.addNominations();
-    navigation.addNavigation(cameraController, filtering);
+    navigation.addNavigation(cameraController, filtering); */
   });
 
   /** Create a loader for the speckle stream */
@@ -47,7 +47,8 @@ async function main() {
     //"75e4788d3e@e4414e9ea1",
   ];
   const urls = await UrlHelper.getResourceUrls(
-    "https://app.speckle.systems/projects/d5b671524f/models/" +
+    //"https://app.speckle.systems/projects/d5b671524f/models/" + //dev model
+    "https://app.speckle.systems/projects/0b4aee874b/models/" +
       versionsUrls.join(",")
   );
   for (const url of urls) {
