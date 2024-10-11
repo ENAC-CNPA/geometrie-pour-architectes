@@ -42,13 +42,14 @@ async function main() {
 
   /** Create a loader for the speckle stream */
   const versionsUrls: string[] = [
-    "75e4788d3e@58fb90f03e",
-    //"75e4788d3e@a815b298c9",
-    //"75e4788d3e@e4414e9ea1",
+    //"75e4788d3e@58fb90f03e", //dev model version 1
+    //"75e4788d3e@a815b298c9", //dev model version 2
+    //"75e4788d3e@e4414e9ea1", //dev model version 3
+    "a3ad727b4a@adce166f4a", //bernard model version 1
   ];
   const urls = await UrlHelper.getResourceUrls(
     //"https://app.speckle.systems/projects/d5b671524f/models/" + //dev model
-    "https://app.speckle.systems/projects/0b4aee874b/models/" +
+    "https://app.speckle.systems/projects/0b4aee874b/models/" + //bernard model
       versionsUrls.join(",")
   );
   for (const url of urls) {
