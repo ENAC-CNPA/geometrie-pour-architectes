@@ -34,10 +34,10 @@ async function main() {
 
   /**Run custom extensions */
   viewer.on(ViewerEvent.LoadComplete, async () => {
-    /* menu.addMenu();
+    menu.addMenu();
     sets.addSets(filtering);
     nominations.addNominations();
-    navigation.addNavigation(cameraController, filtering); */
+    navigation.addNavigation(cameraController, filtering);
   });
 
   /** Create a loader for the speckle stream */
