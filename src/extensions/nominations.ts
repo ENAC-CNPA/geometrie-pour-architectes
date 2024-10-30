@@ -9,6 +9,7 @@ import {
   CSS2DRenderer,
   CSS2DObject,
 } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { Sets } from "./sets.ts";
 
 export class Nominations extends Extension {
   private labelRenderer: CSS2DRenderer;
@@ -29,8 +30,14 @@ export class Nominations extends Extension {
     const topSolidAllElements =
       this.viewer.getWorldTree().root.model.children[0].children[0].children;
 
+    //Import, from sets.ts, the list of app ids of objects belonging to sets, to create only their nominations
+    const sets = this.viewer.createExtension(Sets);
+    const inSetItemsAppIds = sets.findInSetsItemsAppIds();
+
     const topSolidSketches = topSolidAllElements.filter(
-      (item: any) => item.raw.isSketch === true
+      (item: any) =>
+        item.raw.isSketch === true &&
+        inSetItemsAppIds.includes(Number(item.raw.applicationId))
     );
 
     for (const sketch of topSolidSketches) {
@@ -89,7 +96,7 @@ export class Nominations extends Extension {
     const nominationDiv = document.createElement("div");
     nominationDiv.textContent = title;
     nominationDiv.classList.add("label");
-    nominationDiv.classList.add("label-item-id-" + id)
+    nominationDiv.classList.add("label-item-id-" + id);
     nominationDiv.style.paddingLeft = (pad[0] * 5).toString() + "px";
     nominationDiv.style.paddingTop = (pad[1] * 5).toString() + "px";
     const nominationLabel = new CSS2DObject(nominationDiv);

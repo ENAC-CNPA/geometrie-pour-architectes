@@ -3,10 +3,12 @@
  * A set can contain objects, or subsets.
  * Let's call an item = an object or a set, so items of a set are both its objects or subsets.
  * An object may belong to one sets, to multiple sets or to none.
+ * The set doesn't store directly an object, but a reference, which has a different speckle id.
+ * The correspondence is done via an application id.
  */
 
 /**What we receive from TopSolid is an array of all objects and of the main sets.
- * The first step is to traverse these main sets to list all objects belonging to at least one set, and to find subsets.
+ * The first step is to traverse these main sets to list all objects, via their reference, belonging to at least one set, and to find subsets.
  * Objects are found in three places :
  * The real speckle object is inside the main array of the World Tree
  * A reference is found in set.children only for the first set to which belongs the object, with its name and other interesting attributes.
@@ -38,6 +40,7 @@ export class Sets extends Extension {
   private receiveTopSolidItems(): any[] {
     const topSolidReceivedItems =
       this.viewer.getWorldTree().root.model.children[0].children[0].children;
+    console.log(topSolidReceivedItems)
     return topSolidReceivedItems;
   }
 
@@ -47,11 +50,12 @@ export class Sets extends Extension {
     const topSolidMainSets = topSolidReceivedItems.filter(
       (item: any) => item.raw.isSet === true
     );
+    console.log(topSolidMainSets)
     return topSolidMainSets;
   }
 
-  /**Store in an array each item one time (objects, sets and subsets) with their main attributes, without hierarchy*/
-  private storeAllItemsInArray(): any[] {
+  /**Store in an array whithout hierarchy, each item belonging to the set tree with its main attributes*/
+  private arrayInSetItems(): any[] {
     const topSolidMainSets = this.isolateTopSolidMainSets();
     /** Simulate a parent set array to store the main sets as its children,
      * in order to create loop function afterwards starting from it  */
@@ -68,19 +72,19 @@ export class Sets extends Extension {
     parentSet.children.push(...topSolidMainSets);
 
     /**Function to create the array, to be looped on the parentSet*/
-    let allItems: any[] = [];
+    let inSetsItems: any[] = [];
     function pushItems(set: any) {
       for (const item of set.children) {
         const attributes: any[] = [];
         attributes.push(
           item.raw.TopSolid_Name,
-          item.raw.id,
+          item.raw.id, //This id is the one of the reference of the object inside the sets tree, not directly the id of the object in the 3d scene
           item.raw["referenced obj id"],
           item.raw.isSet,
           item.raw.name,
-          item.raw.elements
+          item.raw.elements //again, these are ids of reference
         );
-        allItems.push(attributes);
+        inSetsItems.push(attributes);
         /**if set, loop the same function inside it to get its own children too */
         if (item.raw.isSet) {
           pushItems(item);
@@ -88,16 +92,39 @@ export class Sets extends Extension {
       }
     }
     pushItems(parentSet);
-    return allItems;
+    return inSetsItems;
+  }
+
+  public findInSetsItemsAppIds() {
+    const inSetsItems = this.arrayInSetItems();
+    let inSetItemsAppIds: number[] = [];
+    for (const item of inSetsItems) {
+      if (item[3] !== true) {
+        inSetItemsAppIds.push(item[2]);
+      }
+    }
+    return inSetItemsAppIds;
+  }
+
+  public hideOutSetsItems(filtering: any){
+    const inSetItemsAppIds = this.findInSetsItemsAppIds();
+    const topSolidReceivedItems = this.receiveTopSolidItems();
+    for (const item of topSolidReceivedItems){
+      const applicationId = Number(item.raw.applicationId);
+      const speckleId = item.id;
+      if (!inSetItemsAppIds.includes(applicationId)){
+        filtering.hideObjects([speckleId]);
+      }
+    }
   }
 
   /**Build the sets tree as an array of arrays with hierarchy */
   /**The array set.raw.elements contains only referencedId, we have to find the correspondence in allItems */
   private buildSetsTree(): any[] {
     const topSolidMainSets = this.isolateTopSolidMainSets();
-    const allItems = this.storeAllItemsInArray();
-    /**Simulate a parent set with the same structure, to start the loop. */
+    const allItems = this.arrayInSetItems();
     let mainSetTree: any[] = [];
+    /**Simulate a parent set with the same structure, to start the loop. */
     interface elementsObject {
       referencedId: string;
     }
@@ -129,7 +156,6 @@ export class Sets extends Extension {
       item.push(setTree);
     }
     buildSetTree(mainSetTree, allItems);
-
     return mainSetTree;
   }
 
@@ -452,8 +478,9 @@ export class Sets extends Extension {
       }
     };
   }
-
+  
   public addSets(filtering: any) {
+    this.hideOutSetsItems(filtering);
     this.createList();
     this.clickCheckbox(filtering);
     this.reverseList();
