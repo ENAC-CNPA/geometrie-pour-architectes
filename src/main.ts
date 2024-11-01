@@ -47,6 +47,7 @@ async function main() {
     //"75e4788d3e@e4414e9ea1", //dev model version 3
     //"a3ad727b4a@adce166f4a", //bernard model version 1
     "75e4788d3e@f4f73e94fe" // bernard model on dev model
+    //"75e4788d3e@3ec3aaea16" // avec liste des ensembles
   ];
   const urls = await UrlHelper.getResourceUrls(
     "https://app.speckle.systems/projects/d5b671524f/models/" + //dev model

@@ -50,7 +50,6 @@ export class Sets extends Extension {
     const topSolidMainSets = topSolidReceivedItems.filter(
       (item: any) => item.raw.isSet === true
     );
-    console.log(topSolidMainSets)
     return topSolidMainSets;
   }
 
