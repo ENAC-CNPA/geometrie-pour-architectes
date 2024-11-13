@@ -40,7 +40,6 @@ export class Sets extends Extension {
   private receiveTopSolidItems(): any[] {
     const topSolidReceivedItems =
       this.viewer.getWorldTree().root.model.children[0].children[0].children;
-    console.log(topSolidReceivedItems)
     return topSolidReceivedItems;
   }
 
@@ -53,9 +52,19 @@ export class Sets extends Extension {
     return topSolidMainSets;
   }
 
+  private sortMainsSetsByName(): any[] {
+    const topSolidMainSets = this.isolateTopSolidMainSets();
+    const sortedMainSets = [...topSolidMainSets].sort((a, b) => {
+      if (a.raw.name < b.raw.name) return -1;
+      if (a.raw.name > b.raw.name) return 1;
+      return 0;
+    });
+    return sortedMainSets;
+  }
+
   /**Store in an array whithout hierarchy, each item belonging to the set tree with its main attributes*/
   private arrayInSetItems(): any[] {
-    const topSolidMainSets = this.isolateTopSolidMainSets();
+    const sortedMainSets = this.sortMainsSetsByName();
     /** Simulate a parent set array to store the main sets as its children,
      * in order to create loop function afterwards starting from it  */
     interface parentSet {
@@ -68,7 +77,7 @@ export class Sets extends Extension {
       raw: { elements: [] },
       children: [],
     };
-    parentSet.children.push(...topSolidMainSets);
+    parentSet.children.push(...sortedMainSets);
 
     /**Function to create the array, to be looped on the parentSet*/
     let inSetsItems: any[] = [];
@@ -479,6 +488,7 @@ export class Sets extends Extension {
   }
   
   public addSets(filtering: any) {
+    this.sortMainsSetsByName();
     this.hideOutSetsItems(filtering);
     this.createList();
     this.clickCheckbox(filtering);
