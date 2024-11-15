@@ -46,12 +46,14 @@ async function main() {
     //"75e4788d3e@a815b298c9", //dev model version 2
     //"75e4788d3e@e4414e9ea1", //dev model version 3
     //"a3ad727b4a@adce166f4a", //bernard model version 1
-    "75e4788d3e@f4f73e94fe" // bernard model on dev model
+    //"75e4788d3e@f4f73e94fe" // bernard model on dev model
     //"75e4788d3e@3ec3aaea16" // avec liste des ensembles
+    "9c958fc6a1@b2b1462345", // Fontainebleau
   ];
   const urls = await UrlHelper.getResourceUrls(
-    "https://app.speckle.systems/projects/d5b671524f/models/" + //dev model
+    //"https://app.speckle.systems/projects/d5b671524f/models/" + //dev model
     //"https://app.speckle.systems/projects/0b4aee874b/models/" + //bernard model
+    "https://app.speckle.systems/projects/d8a062602c/models/" + // Fontainebleau model
       versionsUrls.join(",")
   );
   for (const url of urls) {
