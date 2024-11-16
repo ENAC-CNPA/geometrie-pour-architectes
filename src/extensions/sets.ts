@@ -59,6 +59,7 @@ export class Sets extends Extension {
       if (a.raw.name > b.raw.name) return 1;
       return 0;
     });
+    console.log(sortedMainSets); /**do not delete this line, otherwise sometimes the order is not respected */
     return sortedMainSets;
   }
 
@@ -114,13 +115,13 @@ export class Sets extends Extension {
     return inSetItemsAppIds;
   }
 
-  public hideOutSetsItems(filtering: any){
+  public hideOutSetsItems(filtering: any) {
     const inSetItemsAppIds = this.findInSetsItemsAppIds();
     const topSolidReceivedItems = this.receiveTopSolidItems();
-    for (const item of topSolidReceivedItems){
+    for (const item of topSolidReceivedItems) {
       const applicationId = Number(item.raw.applicationId);
       const speckleId = item.id;
-      if (!inSetItemsAppIds.includes(applicationId)){
+      if (!inSetItemsAppIds.includes(applicationId)) {
         filtering.hideObjects([speckleId]);
       }
     }
@@ -486,7 +487,7 @@ export class Sets extends Extension {
       }
     };
   }
-  
+
   public addSets(filtering: any) {
     this.sortMainsSetsByName();
     this.hideOutSetsItems(filtering);

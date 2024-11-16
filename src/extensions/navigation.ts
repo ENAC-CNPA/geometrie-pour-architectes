@@ -28,6 +28,23 @@ export class Navigation extends Extension {
     navigationPane.appendChild(button);
   }
 
+  /**Display menu (this button is displayed only on smartphones) */
+  private addDisplayMenuButton() {
+    const displayMenuButton = document.createElement("button");
+    displayMenuButton.id = "display-menu-button";
+    this.addButton(displayMenuButton, "./icons/FileExplorer.html");
+    const menu = document.getElementById("menu");
+    let displayedMenu = false;
+    displayMenuButton.onclick = () => {
+      if (displayedMenu) {
+        menu!.style.display = "none";
+      } else {
+        menu!.style.display = "block";
+      }
+      displayedMenu = !displayedMenu;
+    };
+  }
+
   /**Toggle camera between ortho and perspective */
   private addPerspectiveButton(cameraController: any) {
     const perspectiveButton = document.createElement("button");
@@ -95,6 +112,7 @@ export class Navigation extends Extension {
 
   public addNavigation(cameraController: any, filtering: any) {
     this.addNavigationPane();
+    this.addDisplayMenuButton();
     this.addPerspectiveButton(cameraController);
     this.addNavViewsButton(cameraController);
     this.addFitButton(cameraController, filtering);

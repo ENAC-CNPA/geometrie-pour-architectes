@@ -26,7 +26,7 @@ html {
   background-color: #fbfbfb;
   position: absolute;
   z-index: 100;
-  user-select: none
+  user-select: none;
 }
 #menu-resizer {
   width: 10px;
@@ -37,7 +37,6 @@ html {
   top: 0;
   cursor: ew-resize;
 }
-
 /*Sets*/
 #sets-list {
   max-height: 70vh;
@@ -74,7 +73,6 @@ html {
   color: black;
   font-weight: bold;
 }
-
 /*Nominations*/
 .label {
   font-family: "Times New Roman", Times, serif;
@@ -104,6 +102,9 @@ html {
   background-color: white;
   cursor: pointer;
 }
+#display-menu-button {
+  display: none;
+}
 #nav-views {
   display: none;
   position: absolute;
@@ -122,4 +123,28 @@ html {
 #nav-views button:hover {
   background-color: #ddd;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  #display-menu-button {
+    display: block;
+  }
+  #menu {
+    display: none;
+    width: 90vw;
+    margin-left: 5vw;
+    margin-top: 50vh;
+  }
+  #sets-list {
+    max-height: 40vh;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    padding-bottom: 10px;
+  }
+  #menu-resizer {
+    display: none;
+  }
+  .list-item{
+    overflow: visible;
+  }
 }
