@@ -59,7 +59,6 @@ export class Sets extends Extension {
       if (a.raw.name > b.raw.name) return 1;
       return 0;
     });
-    console.log(sortedMainSets); /**do not delete this line, otherwise sometimes the order is not respected */
     return sortedMainSets;
   }
 
@@ -165,7 +164,6 @@ export class Sets extends Extension {
       item.push(setTree);
     }
     buildSetTree(mainSetTree, allItems);
-    console.log(mainSetTree);
     return mainSetTree;
   }
 

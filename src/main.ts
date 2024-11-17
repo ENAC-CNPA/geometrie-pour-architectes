@@ -6,6 +6,7 @@ import {
   ViewerEvent,
   FilteringExtension,
 } from "@speckle/viewer";
+import { Styles } from "./extensions/styles.ts";
 import { Menu } from "./extensions/menu.ts";
 import { Sets } from "./extensions/sets.ts";
 import { Nominations } from "./extensions/nominations.ts";
@@ -27,6 +28,7 @@ async function main() {
   const filtering = viewer.createExtension(FilteringExtension);
 
   /**Add custom extensions */
+  const styles = viewer.createExtension(Styles);
   const menu = viewer.createExtension(Menu);
   const sets = viewer.createExtension(Sets);
   const nominations = viewer.createExtension(Nominations);
@@ -34,6 +36,7 @@ async function main() {
 
   /**Run custom extensions */
   viewer.on(ViewerEvent.LoadComplete, async () => {
+    styles.editStyles();
     menu.addMenu();
     nominations.addNominations();
     sets.addSets(filtering);
