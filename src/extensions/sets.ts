@@ -129,7 +129,7 @@ export class Sets extends Extension {
   /**Build the sets tree as an array of arrays with hierarchy */
   /**The array set.raw.elements contains only referencedId, we have to find the correspondence in allItems */
   private buildSetsTree(): any[] {
-    const topSolidMainSets = this.isolateTopSolidMainSets();
+    const sortedMainSets = this.sortMainsSetsByName();
     const allItems = this.arrayInSetItems();
     let mainSetTree: any[] = [];
     /**Simulate a parent set with the same structure, to start the loop. */
@@ -137,9 +137,9 @@ export class Sets extends Extension {
       referencedId: string;
     }
     let parentSetElements: any[] = [];
-    for (const topSolidMainSet of topSolidMainSets) {
+    for (const mainSet of sortedMainSets) {
       let elementsObject: elementsObject = {
-        referencedId: topSolidMainSet.id,
+        referencedId: mainSet.id,
       };
       parentSetElements.push(elementsObject);
     }
