@@ -165,6 +165,7 @@ export class Sets extends Extension {
       item.push(setTree);
     }
     buildSetTree(mainSetTree, allItems);
+    console.log(mainSetTree);
     return mainSetTree;
   }
 
