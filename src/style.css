@@ -125,6 +125,10 @@ html {
   background-color: #ddd;
   cursor: pointer;
 }
+#button-vault {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
 
 @media (max-width: 768px) {
   #display-menu-button {
