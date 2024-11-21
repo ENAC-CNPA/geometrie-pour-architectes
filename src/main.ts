@@ -11,6 +11,7 @@ import { Menu } from "./extensions/menu.ts";
 import { Sets } from "./extensions/sets.ts";
 import { Nominations } from "./extensions/nominations.ts";
 import { Navigation } from "./extensions/navigation.ts";
+import { Start } from "./extensions/start.ts"
 
 async function main() {
   /** Create the HTML container */
@@ -63,6 +64,11 @@ async function main() {
     const loader = new SpeckleLoader(viewer.getWorldTree(), url, "");
     await viewer.loadObject(loader, true);
   }
+  console.log("3D scene loaded")
 }
 
-main();
+async function start() {
+  await main();
+  Start.start();
+}
+start()

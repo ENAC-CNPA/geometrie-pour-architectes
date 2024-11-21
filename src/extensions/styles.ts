@@ -1,3 +1,5 @@
+//WIP. Not yet implemented.
+
 import {
   Extension,
   IViewer,

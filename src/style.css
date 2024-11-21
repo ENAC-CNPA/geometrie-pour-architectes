@@ -78,6 +78,7 @@ html {
   font-family: "Times New Roman", Times, serif;
   font-style: italic;
   font-size: 25px;
+  visibility: hidden;
 }
 
 /*Navigation*/
