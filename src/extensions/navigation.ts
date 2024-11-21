@@ -55,28 +55,53 @@ export class Navigation extends Extension {
     };
   }
 
+  /**fit view on visible objects, used in multiple functions */
+  private fitView(cameraController: any, filtering: any) {
+    const topSolidReceivedItems: any[] =
+      this.viewer.getWorldTree().root.model.children[0].children[0].children;
+    const topSolidReceivedIds: string[] = [];
+    for (const topSolidReceivedItem of topSolidReceivedItems) {
+      topSolidReceivedIds.push(topSolidReceivedItem.id);
+    }
+    const filteringState = filtering.filteringState;
+    const hiddenObjects: any[] = filteringState.hiddenObjects ?? [];
+    const showedObjects = topSolidReceivedIds.filter(
+      (item) => !hiddenObjects.includes(item)
+    );
+    cameraController.setCameraView(showedObjects, true, 1);
+  }
+
+  private createView(
+    cameraController: any,
+    filtering: any,
+    name: string,
+    canonicalView: string,
+    div: HTMLDivElement
+  ) {
+    const view = document.createElement("button");
+    view.textContent = name;
+    view.onclick = () => {
+      cameraController.setOrthoCameraOn();
+      cameraController.setCameraView(canonicalView, true, 0);
+      cameraController.enableRotations();
+      this.fitView(cameraController, filtering);
+    };
+    div.appendChild(view);
+  }
+
   /**Toggle camera to specific views like top */
-  private addNavViewsButton(cameraController: any) {
+  private addNavViewsButton(cameraController: any, filtering: any) {
     const navViewsButton = document.createElement("button");
     this.addButton(navViewsButton, "./icons/Views.html");
     const navViews = document.createElement("div");
     navViews.id = "nav-views";
-    function createView(name: string, canonicalView: string) {
-      const view = document.createElement("button");
-      view.textContent = name;
-      view.onclick = () => {
-        cameraController.setOrthoCameraOn();
-        cameraController.setCameraView(canonicalView, true, 0);
-        cameraController.enableRotations();
-      };
-      navViews.appendChild(view);
-    }
-    createView("Dessus", "top");
-    createView("Dessous", "bottom");
-    createView("Face", "front");
-    createView("Arrière", "back");
-    createView("Gauche", "left");
-    createView("Droite", "right");
+
+    this.createView(cameraController, filtering, "Dessus", "top", navViews);
+    this.createView(cameraController, filtering, "Dessous", "bottom", navViews);
+    this.createView(cameraController, filtering, "Face", "front", navViews);
+    this.createView(cameraController, filtering, "Arrière", "back", navViews);
+    this.createView(cameraController, filtering, "Gauche", "left", navViews);
+    this.createView(cameraController, filtering, "Droite", "right", navViews);
 
     const navigationPane = document.getElementById(
       "nav-pane"
@@ -94,19 +119,8 @@ export class Navigation extends Extension {
   private addFitButton(cameraController: any, filtering: any) {
     const fitButton = document.createElement("button");
     this.addButton(fitButton, "./icons/Fit.html");
-    const topSolidReceivedItems: any[] =
-      this.viewer.getWorldTree().root.model.children[0].children[0].children;
-    const topSolidReceivedIds: string[] = [];
-    for (const topSolidReceivedItem of topSolidReceivedItems) {
-      topSolidReceivedIds.push(topSolidReceivedItem.id);
-    }
     fitButton.onclick = () => {
-      const filteringState = filtering.filteringState;
-      const hiddenObjects: any[] = filteringState.hiddenObjects ?? [];
-      const showedObjects = topSolidReceivedIds.filter(
-        (item) => !hiddenObjects.includes(item)
-      );
-      cameraController.setCameraView(showedObjects, true, 1);
+      this.fitView(cameraController, filtering);
     };
   }
 
@@ -114,7 +128,7 @@ export class Navigation extends Extension {
     this.addNavigationPane();
     this.addDisplayMenuButton();
     this.addPerspectiveButton(cameraController);
-    this.addNavViewsButton(cameraController);
+    this.addNavViewsButton(cameraController, filtering);
     this.addFitButton(cameraController, filtering);
   }
 }
