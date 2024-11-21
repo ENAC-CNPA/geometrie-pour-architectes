@@ -273,12 +273,7 @@ export class Sets extends Extension {
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.checked = true;
-      const subItems = listItem.querySelector("li");
-      if (subItems) {
-        listItem.insertBefore(checkbox, subItems);
-      } else {
-        listItem.appendChild(checkbox);
-      }
+      listItem.prepend(checkbox);
     }
   }
 
