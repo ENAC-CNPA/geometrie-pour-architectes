@@ -6,7 +6,6 @@ import {
   ViewerEvent,
   FilteringExtension,
 } from "@speckle/viewer";
-import { Styles } from "./extensions/styles.ts";
 import { Menu } from "./extensions/menu.ts";
 import { Sets } from "./extensions/sets.ts";
 import { Nominations } from "./extensions/nominations.ts";
