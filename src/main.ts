@@ -6,7 +6,13 @@ import {
   ViewerEvent,
   FilteringExtension,
 } from "@speckle/viewer";
-import { createLoadingIcon, showLoadingIcon, hideLoadingIcon } from './extensions/loading.ts';
+import {
+  createLoadingIcon,
+  showLoadingIcon,
+  hideLoadingIcon,
+} from "./extensions/loading.ts";
+import { createHeader } from "./extensions/header.ts";
+import { createFooter } from "./extensions/footer.ts";
 import { Menu } from "./extensions/menu.ts";
 import { Sets } from "./extensions/sets.ts";
 import { Nominations } from "./extensions/nominations.ts";
@@ -15,6 +21,9 @@ import { Start } from "./extensions/start.ts";
 import { Overlay } from "./extensions/overlay.ts";
 
 async function main() {
+  createHeader();
+  createFooter();
+
   /** Create the HTML container */
   const speckleContainer = document.createElement("div");
   speckleContainer.id = "speckle-container";

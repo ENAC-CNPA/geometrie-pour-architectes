@@ -11,15 +11,56 @@ html {
   font-family: Arial, Helvetica, sans-serif;
 }
 #speckle-container {
-  position: relative;
+  position: fixed;
   height: 100%;
+  top: 0;
   width: 100%;
+  left: 0;
+}
+
+/*Header*/
+header {
+  position: fixed;
+  z-index: 1000;
+}
+#logos-container {
+  display: flex;
+  margin-left: 48px;
+  align-items: center;
+  height: 5.5rem;
+  align-items: center;
+}
+#logo-epfl {
+  height: 27px;
+}
+.logos-unites {
+  height: 50px;
+  margin-left: var(--margin-left);
+  margin-top: 8px;
+}
+
+/*Footer*/
+#footer {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100vw;
+  border: solid 1px #ccc;
+  background-color: #fbfbfb;
+}
+#footer-title {
+  margin-left: 48px;
+}
+#speckle-text {
+  margin-right: 48px;
 }
 
 /*Menu*/
 #menu {
   width: 20vw;
-  margin-top: 10vh;
+  margin-top: 20vh;
   margin-left: 2vw;
   border: solid 1px #ccc;
   border-radius: 5px;
@@ -149,7 +190,7 @@ html {
   #menu-resizer {
     display: none;
   }
-  .list-item{
+  .list-item {
     overflow: visible;
   }
 }
