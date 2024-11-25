@@ -6,6 +6,7 @@ import {
   ViewerEvent,
   FilteringExtension,
 } from "@speckle/viewer";
+import { createLoadingIcon, showLoadingIcon, hideLoadingIcon } from './extensions/loading.ts';
 import { Menu } from "./extensions/menu.ts";
 import { Sets } from "./extensions/sets.ts";
 import { Nominations } from "./extensions/nominations.ts";
@@ -74,7 +75,10 @@ async function main() {
 }
 
 async function start() {
+  createLoadingIcon();
+  showLoadingIcon();
   await main();
   Start.start();
+  hideLoadingIcon();
 }
 start();
