@@ -58,7 +58,7 @@ export class Navigation extends Extension {
   /**fit view on visible objects, used in multiple functions */
   private fitView(cameraController: any, filtering: any) {
     const topSolidReceivedItems: any[] =
-      this.viewer.getWorldTree().root.model.children[0].children[0].children;
+      this.viewer.getWorldTree().root.model.children[1].children[0].children;
     const topSolidReceivedIds: string[] = [];
     for (const topSolidReceivedItem of topSolidReceivedItems) {
       topSolidReceivedIds.push(topSolidReceivedItem.id);

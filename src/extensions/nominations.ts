@@ -28,7 +28,7 @@ export class Nominations extends Extension {
 
   public addNominations() {
     const topSolidAllElements =
-      this.viewer.getWorldTree().root.model.children[0].children[0].children;
+      this.viewer.getWorldTree().root.model.children[1].children[0].children;
 
     //Import, from sets.ts, the list of app ids of objects belonging to sets, to create only their nominations
     const sets = this.viewer.createExtension(Sets);

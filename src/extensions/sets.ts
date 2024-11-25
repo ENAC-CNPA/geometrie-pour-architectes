@@ -39,7 +39,8 @@ export class Sets extends Extension {
   /**List items directly transfered by TopSolid = objects (plan, sketch, etc) and main sets */
   private receiveTopSolidItems(): any[] {
     const topSolidReceivedItems =
-      this.viewer.getWorldTree().root.model.children[0].children[0].children;
+      this.viewer.getWorldTree().root.model.children[1].children[0].children;
+      console.log(this.viewer.getWorldTree().root.model.children[0]);
     return topSolidReceivedItems;
   }
 
