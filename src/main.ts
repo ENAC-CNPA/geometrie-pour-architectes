@@ -13,6 +13,7 @@ import {
 } from "./extensions/loading.ts";
 import { createHeader } from "./extensions/header.ts";
 import { createFooter } from "./extensions/footer.ts";
+import { createIntroduction } from "./extensions/introduction.ts";
 import { Menu } from "./extensions/menu.ts";
 import { Sets } from "./extensions/sets.ts";
 import { Nominations } from "./extensions/nominations.ts";
@@ -85,6 +86,7 @@ async function main() {
 
 async function start() {
   createLoadingIcon();
+  createIntroduction();
   showLoadingIcon();
   await main();
   Start.start();

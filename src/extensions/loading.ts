@@ -19,7 +19,7 @@ export function createLoadingIcon() {
     loadingContainer.style.display = 'flex';
     loadingContainer.style.justifyContent = 'center';
     loadingContainer.style.alignItems = 'center';
-    loadingContainer.style.zIndex = '9999';
+    loadingContainer.style.zIndex = '500';
 
     // Create the actual loading spinner
     const spinner = document.createElement('div');

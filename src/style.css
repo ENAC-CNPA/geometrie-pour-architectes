@@ -58,6 +58,33 @@ header {
   margin-right: 48px;
 }
 
+/*Introduction*/
+#introduction-container {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+#introduction {
+  width: 50%;
+  background-color: rgb(0, 96, 223);
+  color: white;
+  padding: 15px;
+  border: solid 1px #ccc;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#introduction-button {
+  width: 50px;
+  margin: 30px;
+}
+
 /*Menu*/
 #menu {
   width: 20vw;
@@ -172,7 +199,39 @@ header {
   margin-bottom: 10px;
 }
 
+@media (max-width: 1000px) {
+  #logos-container {
+    height: 40px;
+    padding: 0;
+    border-bottom: 1px solid #cccccc;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+  }
+  #logo-epfl {
+    height: 18px;
+    margin-left: 20px;
+  }
+  .logos-unites {
+    height: 30px;
+    margin-left: 3px;
+    margin-top: 2px;
+  }
+}
+
 @media (max-width: 768px) {
+  #introduction {
+    width: 90%;
+  }
+  #footer {
+    font-size: 10px;
+  }
+  #footer-title {
+    margin-left: 20px;
+  }
+  #speckle-text {
+    margin-right: 20px;
+  }
   #display-menu-button {
     display: block;
   }
