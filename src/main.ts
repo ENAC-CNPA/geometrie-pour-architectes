@@ -18,6 +18,7 @@ import { Menu } from "./extensions/menu.ts";
 import { Sets } from "./extensions/sets.ts";
 import { Nominations } from "./extensions/nominations.ts";
 import { Navigation } from "./extensions/navigation.ts";
+import { Photomesh } from "./extensions/photomesh.ts"
 import { Start } from "./extensions/start.ts";
 import { Overlay } from "./extensions/overlay.ts";
 
@@ -45,6 +46,7 @@ async function main() {
   const sets = viewer.createExtension(Sets);
   const nominations = viewer.createExtension(Nominations);
   const navigation = viewer.createExtension(Navigation);
+  const photomesh = viewer.createExtension(Photomesh);
   const overlay = viewer.createExtension(Overlay);
 
   /**Run custom extensions */
@@ -54,6 +56,7 @@ async function main() {
       nominations.addNominations();
       sets.addSets(filtering);
       navigation.addNavigation(cameraController, filtering);
+      photomesh.addPhotomesh();
     } else if (version === 3) {
       overlay.addOverlay(filtering);
     }
