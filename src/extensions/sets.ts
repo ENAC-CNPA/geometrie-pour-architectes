@@ -39,8 +39,8 @@ export class Sets extends Extension {
   /**List items directly transfered by TopSolid = objects (plan, sketch, etc) and main sets */
   private receiveTopSolidItems(): any[] {
     const topSolidReceivedItems =
-      this.viewer.getWorldTree().root.model.children[1].children[0].children;
-      console.log(this.viewer.getWorldTree().root.model.children[0]);
+      this.viewer.getWorldTree().root.model.children[0].children[0].children;
+    console.log(this.viewer.getWorldTree().root.model.children[0].children[0].children);
     return topSolidReceivedItems;
   }
 
@@ -355,13 +355,21 @@ export class Sets extends Extension {
   }
 
   /**Show/hide nominations */
-  private showOrHideNominations(checkbox: HTMLInputElement, speckleId: string) {
+  private showOrHidePointsIconsAndNominations(checkbox: HTMLInputElement, speckleId: string) {
     const shouldVisible = checkbox.checked;
     const nominations = document.getElementsByClassName(
-      "label-item-id-" + speckleId
+      "nomination-id-" + speckleId
     );
     for (const nomination of nominations) {
       (nomination as HTMLElement).style.visibility = shouldVisible
+        ? "visible"
+        : "hidden";
+    }
+    const pointsIcons = document.getElementsByClassName(
+      "point-icon-id-" + speckleId
+    );
+    for (const pointIcon of pointsIcons) {
+      (pointIcon as HTMLElement).style.visibility = shouldVisible
         ? "visible"
         : "hidden";
     }
@@ -379,7 +387,7 @@ export class Sets extends Extension {
       const speckleId = listItem.dataset.speckleid!;
       this.updateTwinsCheckboxes(checkbox, listItems, listItem, speckleId);
       this.showOrHideObject(speckleId, checkbox, filtering);
-      this.showOrHideNominations(checkbox, speckleId);
+      this.showOrHidePointsIconsAndNominations(checkbox, speckleId);
     } else if (listItem.classList.contains("set")) {
       /**If indeterminate, get rid of indeterminate status */
       checkbox.indeterminate = false;

@@ -1,5 +1,3 @@
-//WIP. Not yet implemented.
-
 import {
   Extension,
   IViewer,
@@ -8,12 +6,26 @@ import {
   GeometryType,
 } from "@speckle/viewer";
 
+import { LineDashedMaterial, Vector3, BufferGeometry, Line } from "three";
+
 export class Styles extends Extension {
   public constructor(viewer: IViewer) {
     super(viewer);
     this.viewer.getRenderer();
   }
-  public editStyles() {
+  //not used: points icons replaced in pointsAndNominations
+  public editPointColor() {
+    
+    const materialData: any = {
+      id: "1",
+      color: 0x047efb,
+      opacity: 1,
+      roughness: 1,
+      metalness: 0,
+      vertexColors: true,
+      pointSize: 2,
+    };
+    
     const pointRvs: NodeRenderView[] = [];
     this.viewer
       .getWorldTree()
@@ -31,16 +43,35 @@ export class Styles extends Extension {
             .getRenderViewsForNode(value)
         );
       });
-    console.log(pointRvs)
-    const materialData: any = {
-      id: "1",
-      color: 0x047efb,
-      opacity: 1,
-      roughness: 1,
-      metalness: 0,
-      vertexColors: false,
-      pointSize: 4,
-    };
     this.viewer.getRenderer().setMaterial(pointRvs, materialData);
+  }
+
+  public addDashedLines() {
+
+    // https://threejs.org/docs/#api/en/materials/LineDashedMaterial
+
+    // Geometry (line with multiple points)
+    const points = [];
+    points.push(new Vector3(-10000, 0, 0));
+    points.push(new Vector3(0, 10000, 0));
+    points.push(new Vector3(10000, 0, 0));
+
+    const geometry = new BufferGeometry().setFromPoints(points);
+
+    // Dashed line material
+    const material = new LineDashedMaterial({
+      color: 0xffffff,
+      linewidth: 1,
+      scale: 1,
+      dashSize: 3,
+      gapSize: 1,
+    });
+
+    // Line
+    const line = new Line(geometry, material);
+    line.computeLineDistances();
+
+    this.viewer.getRenderer().scene.add(line);
+
   }
 }

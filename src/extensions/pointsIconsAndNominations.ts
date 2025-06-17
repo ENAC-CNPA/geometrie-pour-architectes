@@ -11,7 +11,7 @@ import {
 } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { Sets } from "./sets.ts";
 
-export class Nominations extends Extension {
+export class PointsIconsAndNominations extends Extension {
   private labelRenderer: CSS2DRenderer;
   public constructor(viewer: IViewer) {
     super(viewer);
@@ -26,9 +26,9 @@ export class Nominations extends Extension {
     speckleContainer.append(this.labelRenderer.domElement);
   }
 
-  public addNominations() {
+  public addPointsIconsAndNominations() {
     const topSolidAllElements =
-      this.viewer.getWorldTree().root.model.children[1].children[0].children;
+      this.viewer.getWorldTree().root.model.children[0].children[0].children;
 
     //Import, from sets.ts, the list of app ids of objects belonging to sets, to create only their nominations
     const sets = this.viewer.createExtension(Sets);
@@ -43,18 +43,34 @@ export class Nominations extends Extension {
     for (const sketch of topSolidSketches) {
       const vertices = sketch.raw.Vertices;
       for (const vertex of vertices) {
+        const id = sketch.id;
+        const nominationColor = vertex.vertexColor ?? 0;
+        /** Get the position of the point in the 3D space, see function below*/
+        const pos = this.getPointPosition(vertex.id);
         if (vertex.vertexName) {
-          const id = sketch.id;
-          /** Get the position of the point in the 3D space, see function below*/
-          const pos = this.getPointPosition(vertex.id);
-          /** Get the position of the text relatively to the point on the 2D screen*/
           let pad = [];
+          /** Get the position of the text relatively to the point on the 2D screen*/
           pad.push(vertex.namePosVector.x, vertex.namePosVector.y);
           /** Get the position of the text relatively to the point on the 2D screen*/
-          if (pos) this.addLabel(vertex.vertexName, pos, pad, id);
+          if (pos) this.addNomination(nominationColor, vertex.vertexName, pos, pad, id);
         }
+        if (pos)  this.addPointIcon(vertex.displayStyle.color, "◦", pos, id);
       }
     }
+
+    const topSolidPoints = topSolidAllElements.filter(
+      (item: any) =>
+        item.raw.isPoint === true &&
+        inSetItemsAppIds.includes(Number(item.raw.applicationId))
+    );
+
+    for (const point of topSolidPoints) {
+        const id = point.id;
+        /** Get the position of the point in the 3D space, see function below*/
+        const pos = this.getPointPosition(point.id);
+        if (pos)  this.addPointIcon(point.displayStyle.color, "◦", pos, id);
+    }
+
   }
 
   private getPointPosition(id: string): Vector3 | undefined {
@@ -92,18 +108,42 @@ export class Nominations extends Extension {
     );
   }
 
-  public addLabel(title: string, pos: Vector3, pad: number[], id: string) {
+  public addNomination(color:number, title: string, pos: Vector3, pad: number[], id: string) {
     const nominationDiv = document.createElement("div");
     nominationDiv.textContent = title;
-    nominationDiv.classList.add("label");
-    nominationDiv.classList.add("label-item-id-" + id);
-    nominationDiv.style.paddingLeft = (pad[0] * 5).toString() + "px";
-    nominationDiv.style.paddingTop = (pad[1] * 5).toString() + "px";
+    nominationDiv.classList.add("nomination");
+    nominationDiv.classList.add("nomination-id-" + id);
+    nominationDiv.style.color = `#${(color >>> 0 & 0xFFFFFF).toString(16).padStart(6, '0')}`;
+    const paddingX = pad[0];
+    if (paddingX < 0) {
+      nominationDiv.style.paddingRight = (-pad[0] * 8).toString() + "px";
+    } else if (paddingX > 0) {
+      nominationDiv.style.paddingLeft = (pad[0] * 8).toString() + "px";
+    }
+    const paddingY = pad[1];
+    if (paddingY < 0) {
+      nominationDiv.style.paddingTop = (-pad[1] * 8).toString() + "px";
+    } else if (paddingY > 0) {
+      nominationDiv.style.paddingBottom = (pad[1] * 8).toString() + "px";
+    }
     const nominationLabel = new CSS2DObject(nominationDiv);
     nominationLabel.position.copy(pos);
     nominationLabel.layers.set(ObjectLayers.OVERLAY);
     this.viewer.getRenderer().scene.add(nominationLabel);
   }
+
+  public addPointIcon(color: number, icon: string, pos: Vector3, id: string) {
+    const pointIconDiv = document.createElement("div");
+    pointIconDiv.textContent = icon;
+    pointIconDiv.classList.add("point-icon");
+    pointIconDiv.classList.add("point-icon-id-" + id);
+    pointIconDiv.style.color = `#${(color >>> 0 & 0xFFFFFF).toString(16).padStart(6, '0')}`;
+    const pointIconLabel = new CSS2DObject(pointIconDiv);
+    pointIconLabel.position.copy(pos);
+    pointIconLabel.layers.set(ObjectLayers.OVERLAY);
+    this.viewer.getRenderer().scene.add(pointIconLabel);
+  }
+
   public onRender() {
     this.labelRenderer.render(
       this.viewer.getRenderer().scene,

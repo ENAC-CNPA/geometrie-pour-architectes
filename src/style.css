@@ -142,12 +142,15 @@ header {
   color: black;
   font-weight: bold;
 }
-/*Nominations*/
-.label {
+/*Points Icons and Nominations*/
+.nomination {
   font-family: "Times New Roman", Times, serif;
   font-style: italic;
   font-size: 25px;
-  visibility: hidden;
+}
+.point-icon {
+  font-size: 27px;
+  font-weight: bolder;
 }
 
 /*Navigation*/

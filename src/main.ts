@@ -13,14 +13,11 @@ import {
 } from "./extensions/loading.ts";
 import { createHeader } from "./extensions/header.ts";
 import { createFooter } from "./extensions/footer.ts";
-import { createIntroduction } from "./extensions/introduction.ts";
 import { Menu } from "./extensions/menu.ts";
 import { Sets } from "./extensions/sets.ts";
-import { Nominations } from "./extensions/nominations.ts";
+import { PointsIconsAndNominations } from "./extensions/pointsIconsAndNominations.ts";
 import { Navigation } from "./extensions/navigation.ts";
-import { Photomesh } from "./extensions/photomesh.ts"
-import { Start } from "./extensions/start.ts";
-import { Overlay } from "./extensions/overlay.ts";
+import { Styles } from "./extensions/styles.ts";
 
 async function main() {
   createHeader();
@@ -44,55 +41,36 @@ async function main() {
   //const styles = viewer.createExtension(Styles);
   const menu = viewer.createExtension(Menu);
   const sets = viewer.createExtension(Sets);
-  const nominations = viewer.createExtension(Nominations);
+  const pointsIconsAndNominations = viewer.createExtension(PointsIconsAndNominations);
   const navigation = viewer.createExtension(Navigation);
-  const photomesh = viewer.createExtension(Photomesh);
-  const overlay = viewer.createExtension(Overlay);
+  const styles = viewer.createExtension(Styles);
 
   /**Run custom extensions */
   viewer.on(ViewerEvent.LoadComplete, async () => {
-    if (version === 1) {
-      menu.addMenu();
-      nominations.addNominations();
-      sets.addSets(filtering);
-      navigation.addNavigation(cameraController, filtering);
-      photomesh.addPhotomesh();
-    } else if (version === 3) {
-      overlay.addOverlay(filtering);
-    }
+    menu.addMenu();
+    pointsIconsAndNominations.addPointsIconsAndNominations();
+    sets.addSets(filtering);
+    navigation.addNavigation(cameraController, filtering);
+    styles.addDashedLines();
   });
 
   /** Create a loader for the speckle stream */
   const versionsUrls: string[] = [
-    //"75e4788d3e@e4414e9ea1", //dev model version 1
-    //"75e4788d3e@58fb90f03e", //dev model version 2
-    "9c958fc6a1@c96d453ebb", // Fontainebleau 1P = EPURE PLANE //load as 1
-    "9c958fc6a1@d607ffdf58", // Fontainebleau 2s = EPURE SPATIALE
-    "9c958fc6a1@803c865141", // Voussoirs 1 //load as 0
-    "9c958fc6a1@dc84d6c51d", // Voussoirs 2
+    "5626cd6127@e6fcbc18ba",
   ];
-  const urls = await UrlHelper.getResourceUrls(
-    //"https://app.speckle.systems/projects/d5b671524f/models/" + //dev model
-    "https://app.speckle.systems/projects/d8a062602c/models/" + // Fontainebleau model
+  const urls = await UrlHelper.getResourceUrls( /*Need to set the speckle project on public*/
+    "https://app.speckle.systems/projects/400bc84669/models/" +
       versionsUrls.join(",")
   );
 
-  let version = 0;
-
-  for (let i = 0; i < urls.length; i++) {
-    const loader = new SpeckleLoader(viewer.getWorldTree(), urls[i], "");
-    await viewer.loadObject(loader, true);
-    console.log("Model loaded:", versionsUrls[i]);
-    version++;
-  }
+  const loader = new SpeckleLoader(viewer.getWorldTree(), urls[0], "");
+  await viewer.loadObject(loader, true);
 }
 
 async function start() {
   createLoadingIcon();
-  createIntroduction();
   showLoadingIcon();
   await main();
-  Start.start();
   hideLoadingIcon();
 }
 start();

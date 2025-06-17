@@ -5,7 +5,7 @@ export function createFooter() {
 
   const footerTitle = document.createElement("p");
   footerTitle.id = "footer-title";
-  footerTitle.textContent = "Leçon d'honneur Prof. Bernard Cache";
+  footerTitle.textContent = "Footer";
 
   const speckleText = document.createElement("p");
   speckleText.id = "speckle-text";
