@@ -44,22 +44,37 @@ export class Dimensions extends Extension {
     for (const sketch of topSolidSketches) {
         const profiles = sketch.raw.Profiles;
         
-        console.log(profiles)
         const sketchProfiles = profiles.filter(
             (item: any) =>
                 item.IsSketch === "yes"
         );
-        const dimensionsProfiles = profiles.filter(
-            (item: any) =>
-                !item.IsSketch
-        );
-        const dimensionsIds: string[] = [];
-        for (const profile of dimensionsProfiles) {
-            dimensionsIds.push(profile.id)
-        }
-        filtering.hideObjects(dimensionsIds);
 
-        console.log('Sketch type:', sketch.constructor.name)
+        const dimensionsLinesIds: string[] = [];
+        const dimensionsLinesProfiles = profiles.filter(
+            (item: any) =>
+                !item.IsSketch &&
+                !item.position
+        );
+        for (const profile of dimensionsLinesProfiles) {
+            dimensionsLinesIds.push(profile.id)
+        }
+        //filtering.hideObjects(dimensionsLinesIds);
+        
+        const dimensionsTextsIds: string[] = [];
+        const dimensionsTextsProfiles = profiles.filter(
+            (item: any) =>
+                !item.IsSketch &&
+                'position' in item
+        );
+        for (const profile of dimensionsTextsProfiles) {
+            dimensionsTextsIds.push(profile.id)
+            console.log(profile)
+            const pos = new Vector3(profile.position.x, profile.position.y, profile.position.z)
+            const id = sketch.id
+            this.addDimensionText(profile.value.replace(/\s*mm$/, ''), pos, id);
+        }
+        //filtering.hideObjects(dimensionsTextsIds);
+
 
         /* error = Uncaught (in promise) TypeError: sketch.on is not a function
         sketch.on(ViewerEvent.ObjectDoubleClicked, async () => {
@@ -67,6 +82,17 @@ export class Dimensions extends Extension {
         });
         */
     }
+  }
+
+  private addDimensionText(value: string, pos: Vector3, id: string) {
+    const dimensionTextDiv = document.createElement("div");
+    dimensionTextDiv.textContent = value;
+    dimensionTextDiv.classList.add("dimension-text");
+    dimensionTextDiv.classList.add("dimension-text-id-" + id);
+    const dimensionTextLabel = new CSS2DObject(dimensionTextDiv);
+    dimensionTextLabel.position.copy(pos);
+    dimensionTextLabel.layers.set(ObjectLayers.OVERLAY);
+    this.viewer.getRenderer().scene.add(dimensionTextLabel);
   }
 
   public onRender() {

@@ -142,7 +142,7 @@ header {
   color: black;
   font-weight: bold;
 }
-/*Points Icons and Nominations*/
+/*2D Labels : Points Icon, Nominations, Dimensions Texts*/
 .nomination {
   font-family: "Times New Roman", Times, serif;
   font-style: italic;
@@ -151,6 +151,9 @@ header {
 .point-icon {
   font-size: 27px;
   font-weight: bolder;
+}
+.dimension-text {
+  background-color: white;
 }
 
 /*Navigation*/

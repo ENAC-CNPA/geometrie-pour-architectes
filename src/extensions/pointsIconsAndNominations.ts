@@ -108,7 +108,7 @@ export class PointsIconsAndNominations extends Extension {
     );
   }
 
-  public addNomination(color:number, title: string, pos: Vector3, pad: number[], id: string) {
+  private addNomination(color:number, title: string, pos: Vector3, pad: number[], id: string) {
     const nominationDiv = document.createElement("div");
     nominationDiv.textContent = title;
     nominationDiv.classList.add("nomination");
@@ -132,7 +132,7 @@ export class PointsIconsAndNominations extends Extension {
     this.viewer.getRenderer().scene.add(nominationLabel);
   }
 
-  public addPointIcon(color: number, icon: string, pos: Vector3, id: string) {
+  private addPointIcon(color: number, icon: string, pos: Vector3, id: string) {
     const pointIconDiv = document.createElement("div");
     pointIconDiv.textContent = icon;
     pointIconDiv.classList.add("point-icon");

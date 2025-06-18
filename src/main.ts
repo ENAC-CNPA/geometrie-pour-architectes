@@ -60,6 +60,7 @@ async function main() {
   /** Create a loader for the speckle stream */
   const versionsUrls: string[] = [
     "5626cd6127@923e274f00",
+    //"5626cd6127@e6fcbc18ba",
   ];
   const urls = await UrlHelper.getResourceUrls( /*Need to set the speckle project on public*/
     "https://app.speckle.systems/projects/400bc84669/models/" +
