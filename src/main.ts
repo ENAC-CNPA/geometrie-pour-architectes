@@ -19,6 +19,7 @@ import { PointsIconsAndNominations } from "./extensions/pointsIconsAndNomination
 import { Navigation } from "./extensions/navigation.ts";
 import { Styles } from "./extensions/styles.ts";
 import { Dimensions } from "./extensions/dimensions.ts";
+import { ThreeDNominations } from "./extensions/3DNominations.ts";
 
 async function main() {
   createHeader();
@@ -46,6 +47,7 @@ async function main() {
   const navigation = viewer.createExtension(Navigation);
   const styles = viewer.createExtension(Styles);
   const dimensions = viewer.createExtension(Dimensions);
+  const threeDNominations = viewer.createExtension(ThreeDNominations);
 
   /**Run custom extensions */
   viewer.on(ViewerEvent.LoadComplete, async () => {
@@ -55,12 +57,12 @@ async function main() {
     navigation.addNavigation(cameraController, filtering);
     styles.addDashedLines();
     dimensions.addDimensions(ViewerEvent, filtering);
+    threeDNominations.add3DNominations();
   });
 
   /** Create a loader for the speckle stream */
   const versionsUrls: string[] = [
-    "5626cd6127@923e274f00",
-    //"5626cd6127@e6fcbc18ba",
+    "5626cd6127@e6fcbc18ba",
   ];
   const urls = await UrlHelper.getResourceUrls( /*Need to set the speckle project on public*/
     "https://app.speckle.systems/projects/400bc84669/models/" +
