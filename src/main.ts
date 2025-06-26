@@ -18,9 +18,9 @@ import { Sets } from "./extensions/sets.ts";
 import { PointsIconsAndNominations } from "./extensions/pointsIconsAndNominations.ts";
 import { Navigation } from "./extensions/navigation.ts";
 import { Styles } from "./extensions/styles.ts";
-import { Dimensions } from "./extensions/dimensions.ts";
-import { ThreeDNominations } from "./extensions/3DNominations.ts";
-import { Frames } from "./extensions/frames.ts";
+//import { Dimensions } from "./extensions/dimensions.ts";
+//import { ThreeDNominations } from "./extensions/3DNominations.ts";
+//import { Frames } from "./extensions/frames.ts";
 
 async function main() {
   createHeader();
@@ -47,9 +47,9 @@ async function main() {
   const pointsIconsAndNominations = viewer.createExtension(PointsIconsAndNominations);
   const navigation = viewer.createExtension(Navigation);
   const styles = viewer.createExtension(Styles);
-  const dimensions = viewer.createExtension(Dimensions);
-  const threeDNominations = viewer.createExtension(ThreeDNominations);
-  const frames = viewer.createExtension(Frames);
+  //const dimensions = viewer.createExtension(Dimensions);
+  //const threeDNominations = viewer.createExtension(ThreeDNominations);
+  //const frames = viewer.createExtension(Frames);
 
   /**Run custom extensions */
   viewer.on(ViewerEvent.LoadComplete, async () => {
@@ -58,8 +58,8 @@ async function main() {
     styles.setLinesStyle();
     sets.addSets(filtering);
     navigation.addNavigation(cameraController, filtering);
-    dimensions.addDimensions(ViewerEvent, filtering);
-    threeDNominations.add3DNominations();
+    //dimensions.addDimensions(ViewerEvent, filtering);
+    //threeDNominations.add3DNominations();
     //frames.addFrames();
   });
 
