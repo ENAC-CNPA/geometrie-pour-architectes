@@ -30,7 +30,6 @@ export class ThreeDNominations extends Extension {
     const topSolidAllElements =
       this.viewer.getWorldTree().root.model.children[0].children[0].children;
 
-    //Import, from sets.ts, the list of app ids of objects belonging to sets, to create only their nominations
     const sets = this.viewer.createExtension(Sets);
     const inSetItemsAppIds = sets.findInSetsItemsAppIds();
 
@@ -48,41 +47,47 @@ export class ThreeDNominations extends Extension {
       );
 
       for (const profile of sketchProfiles) {
-        console.log(profile.namePosDirSegment);
-        console.log(profile.namePosPointSegment);
-        console.log(profile.segmentName);
-        console.log(profile.segmentNameColor);
-        console.log(profile.segmentNameReversed);
+        if ('segmentName' in profile){
+          
+          /*
+          console.log(profile.namePosDirSegment);
+          console.log(profile.namePosPointSegment);
+          console.log(profile.segmentName);
+          console.log(profile.segmentNameColor);
+          console.log(profile.segmentNameDirectionInverted);
+          */
+          
 
-        const threeDNomination = document.createElement("div");
-        threeDNomination.className = "three-d-nomination";
-        threeDNomination.innerHTML = profile.segmentName;
+          const threeDNomination = document.createElement("div");
+          threeDNomination.className = "three-d-nomination";
+          threeDNomination.innerHTML = profile.segmentName;
 
-        const origin = new Vector3(
-          profile.namePosPointSegment.x,
-          profile.namePosPointSegment.y,
-          profile.namePosPointSegment.z
-        )
+          const origin = new Vector3(
+            profile.namePosPointSegment.x,
+            profile.namePosPointSegment.y,
+            profile.namePosPointSegment.z
+          )
 
-        const objectCSS = new CSS3DObject(threeDNomination);
-        objectCSS.scale.set(0.003, 0.003, 0.003);
-        objectCSS.position.copy(origin)
-        
-        const direction = new Vector3(
-          profile.namePosDirSegment.x,
-          profile.namePosDirSegment.y,
-          profile.namePosDirSegment.z
-        );
+          const objectCSS = new CSS3DObject(threeDNomination);
+          objectCSS.scale.set(0.003, 0.003, 0.003);
+          objectCSS.position.copy(origin)
+          
+          const direction = new Vector3(
+            profile.namePosDirSegment.x,
+            profile.namePosDirSegment.y,
+            profile.namePosDirSegment.z
+          );
 
-        const target = new Vector3().addVectors(origin, direction);
+          const target = new Vector3().addVectors(origin, direction);
 
 
-        objectCSS.lookAt(target);
-        objectCSS.rotateY( - Math.PI / 2 );
-        
+          objectCSS.lookAt(target);
+          objectCSS.rotateY( - Math.PI / 2 );
+          
 
-        objectCSS.layers.set(ObjectLayers.OVERLAY);
-        this.viewer.getRenderer().scene.add(objectCSS);
+          objectCSS.layers.set(ObjectLayers.OVERLAY);
+          this.viewer.getRenderer().scene.add(objectCSS);
+        }
       }
     }
   }

@@ -1,77 +1,66 @@
 import {
   Extension,
   IViewer,
-  NodeRenderView,
   TreeNode,
   GeometryType,
+  LineBatch
 } from "@speckle/viewer";
-
-import { LineDashedMaterial, Vector3, BufferGeometry, Line } from "three";
+import { Vector2 } from "three";
 
 export class Styles extends Extension {
   public constructor(viewer: IViewer) {
     super(viewer);
     this.viewer.getRenderer();
   }
-  //not used: points icons replaced in pointsAndNominations
-  public editPointColor() {
-    
-    const materialData: any = {
-      id: "1",
-      color: 0x047efb,
-      opacity: 1,
-      roughness: 1,
-      metalness: 0,
-      vertexColors: true,
-      pointSize: 2,
-    };
-    
-    const pointRvs: NodeRenderView[] = [];
-    this.viewer
-      .getWorldTree()
-      .findAll((node: TreeNode) => {
-        return (
-          node.model.renderView &&
-          node.model.renderView.geometryType === GeometryType.POINT
-        );
-      })
-      .map((value: TreeNode) => {
-        pointRvs.push(
-          ...this.viewer
-            .getWorldTree()
-            .getRenderTree()
-            .getRenderViewsForNode(value)
-        );
-      });
-    this.viewer.getRenderer().setMaterial(pointRvs, materialData);
-  }
 
-  public addDashedLines() {
+  public setLinesStyle() {
+    const batches = this.viewer
+      .getRenderer()
+      .batcher.getBatches(undefined, GeometryType.LINE);
+    console.log("batches", batches);
 
-    // https://threejs.org/docs/#api/en/materials/LineDashedMaterial
+    const allRenderViews: [any, LineBatch][] = []; //store renderView with its batch
 
-    // Geometry (line with multiple points)
-    const points = [];
-    points.push(new Vector3(-10000, 0, 0));
-    points.push(new Vector3(0, 10000, 0));
-    points.push(new Vector3(10000, 0, 0));
+    for (const batch of batches) {
+      const renderViews = batch.renderViews;
+      for (const renderView of renderViews) {
+        allRenderViews.push([renderView, batch]);
+      }
+    }
 
-    const geometry = new BufferGeometry().setFromPoints(points);
+    console.log("allRenderViews", allRenderViews);
 
-    // Dashed line material
-    const material = new LineDashedMaterial({
-      color: 0xffffff,
-      linewidth: 1,
-      scale: 1,
-      dashSize: 3,
-      gapSize: 1,
+    const sketches = this.viewer.getWorldTree().findAll((node: TreeNode) => {
+      return node.model.raw.isSketch === true;
     });
+    for (const sketch of sketches) {
+      const profiles = sketch.model.raw.Profiles;
+      console.log("Profiles:", profiles);
+      for (const profile of profiles) {
+        const match = allRenderViews.find(
+          (renderView: any) => renderView[0]._renderData.id === profile.id
+        );
+        if (match) {
+          console.log("match", match);
+          const material = match[1].batchMaterial;
+          console.log("material", material);
+          console.log("style", profile.displayStyle.linetype); // this is currently not correctly sent from TopSolid  
 
-    // Line
-    const line = new Line(geometry, material);
-    line.computeLineDistances();
+          material.linewidth = profile.displayStyle.lineweight * 1.5;
+          material.worldUnits = false;
+          material.vertexColors = true;
+          material.pixelThreshold = 0.5;
+          material.resolution = new Vector2();
+          material.dashed = true;
+          material.dashScale = 200; // to do: adapt to the scale of the model
+          material.dashSize = 1;
+          material.gapSize = 1;
 
-    this.viewer.getRenderer().scene.add(line);
+          this.viewer.getRenderer().setMaterial([match[0]], material);
 
+          match[1].resetDrawRanges();
+        }
+      }
+    }
   }
 }

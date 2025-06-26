@@ -1,4 +1,5 @@
-import { Extension, IViewer } from "@speckle/viewer";
+import { Extension, IViewer, SelectionExtension } from "@speckle/viewer";
+import { Vector3 } from "three";
 
 export class Navigation extends Extension {
   public constructor(viewer: IViewer) {
@@ -45,16 +46,6 @@ export class Navigation extends Extension {
     };
   }
 
-  /**Toggle camera between ortho and perspective */
-  private addPerspectiveButton(cameraController: any) {
-    const perspectiveButton = document.createElement("button");
-    perspectiveButton.id = "perspective-button";
-    this.addButton(perspectiveButton, "./icons/Perspective.html");
-    perspectiveButton.onclick = () => {
-      cameraController.toggleCameras();
-    };
-  }
-
   /**fit view on visible objects, used in multiple functions */
   private fitView(cameraController: any, filtering: any) {
     const topSolidReceivedItems: any[] =
@@ -71,6 +62,17 @@ export class Navigation extends Extension {
     cameraController.setCameraView(showedObjects, true, 1);
   }
 
+  /**Toggle camera between ortho and perspective */
+  private addPerspectiveButton(cameraController: any) {
+    const perspectiveButton = document.createElement("button");
+    perspectiveButton.id = "perspective-button";
+    this.addButton(perspectiveButton, "./icons/Perspective.html");
+    perspectiveButton.onclick = () => {
+      cameraController.toggleCameras();
+    };
+  }
+
+  /**Toggle camera to specific views like top */
   private createView(
     cameraController: any,
     filtering: any,
@@ -88,8 +90,6 @@ export class Navigation extends Extension {
     };
     div.appendChild(view);
   }
-
-  /**Toggle camera to specific views like top */
   private addNavViewsButton(cameraController: any, filtering: any) {
     const navViewsButton = document.createElement("button");
     this.addButton(navViewsButton, "./icons/Views.html");
@@ -124,11 +124,79 @@ export class Navigation extends Extension {
     };
   }
 
+  //*Orient view on selected plane*/
+  private orientViewOnPlane(selection: any, cameraController: any, filtering: any) {
+    const selectedNodes = selection.getSelectedNodes();
+    const selectedNode = selectedNodes[0];
+    if (
+      selectedNode.model.raw.speckle_type === "Objects.Geometry.Polycurve" &&
+      selectedNode.model.raw.segments.length === 4
+    ) {
+      const p1 = new Vector3(
+        selectedNode.model.raw.segments[0].start.x,
+        selectedNode.model.raw.segments[0].start.y,
+        selectedNode.model.raw.segments[0].start.z
+      );
+      const p2 = new Vector3(
+        selectedNode.model.raw.segments[1].start.x,
+        selectedNode.model.raw.segments[1].start.y,
+        selectedNode.model.raw.segments[1].start.z
+      );
+      const p3 = new Vector3(
+        selectedNode.model.raw.segments[2].start.x,
+        selectedNode.model.raw.segments[2].start.y,
+        selectedNode.model.raw.segments[2].start.z
+      );
+      const p4 = new Vector3(
+        selectedNode.model.raw.segments[3].start.x,
+        selectedNode.model.raw.segments[3].start.y,
+        selectedNode.model.raw.segments[3].start.z
+      );
+      const center = new Vector3()
+        .add(p1)
+        .add(p2)
+        .add(p3)
+        .add(p4)
+        .divideScalar(4);
+
+      const v1 = new Vector3().subVectors(p2, p1);
+      const v2 = new Vector3().subVectors(p4, p1);
+
+      const normal = new Vector3().crossVectors(v1, v2).normalize();
+
+      const cameraPosition = new Vector3()
+        .copy(normal)
+        .multiplyScalar(10)
+        .add(center);
+
+      cameraController.setCameraView(
+        { position: cameraPosition, target: center },
+        true,
+        0
+      );
+
+      this.fitView(cameraController, filtering);
+    }
+  }
+  private addOrientButton(cameraController: any, filtering: any) {
+    const orientButton = document.createElement("button");
+    this.addButton(orientButton, "./icons/Fit.html");
+    
+    const selection = this.viewer.createExtension(SelectionExtension);
+    selection.enabled = true;
+
+    orientButton.onclick = () => {
+      this.orientViewOnPlane(selection, cameraController, filtering);
+    };
+  }
+
+  //*Add all buttons*/
   public addNavigation(cameraController: any, filtering: any) {
     this.addNavigationPane();
     this.addDisplayMenuButton();
     this.addPerspectiveButton(cameraController);
     this.addNavViewsButton(cameraController, filtering);
     this.addFitButton(cameraController, filtering);
+    this.addOrientButton(cameraController, filtering);
   }
 }
