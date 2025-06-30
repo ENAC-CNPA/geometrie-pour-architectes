@@ -3,7 +3,7 @@ import {
   IViewer,
   TreeNode,
   GeometryType,
-  LineBatch
+  LineBatch,
 } from "@speckle/viewer";
 import { Vector2 } from "three";
 
@@ -44,17 +44,49 @@ export class Styles extends Extension {
           console.log("match", match);
           const material = match[1].batchMaterial;
           console.log("material", material);
-          console.log("style", profile.displayStyle.linetype); // this is currently not correctly sent from TopSolid  
+          console.log("style", profile.displayStyle.linetype);
 
           material.linewidth = profile.displayStyle.lineweight * 1.5;
           material.worldUnits = false;
           material.vertexColors = true;
           material.pixelThreshold = 0.5;
           material.resolution = new Vector2();
-          material.dashed = true;
-          material.dashScale = 200; // to do: adapt to the scale of the model
-          material.dashSize = 1;
-          material.gapSize = 1;
+
+          if (profile.displayStyle.linetype === "Dash") {
+            material.dashed = true;
+            material.dashScale = 200; // to do: adapt to the scale of the model
+            material.dashSize = 1;
+            material.gapSize = 1;
+          }
+
+          if (profile.displayStyle.linetype === "Dot") {
+            material.dashed = true;
+            material.dashScale = 200; // to do: adapt to the scale of the model
+            material.dashSize = 0.2;
+            material.gapSize = 0.2;
+          }
+
+          
+          if (profile.displayStyle.linetype === "DashDot") {
+            material.dashed = true;
+            material.dashScale = 200; // to do: adapt to the scale of the model
+            material.dashSize = 2;
+            material.gapSize = 0.4;
+          }
+
+          if (profile.displayStyle.linetype === "DashDotDot") {
+            material.dashed = true;
+            material.dashScale = 200; // to do: adapt to the scale of the model
+            material.dashSize = 1.5;
+            material.gapSize = 0.6;
+          }
+
+          if (profile.displayStyle.linetype === "Continuous") {
+            material.dashed = true;
+            material.dashScale = 200; // to do: adapt to the scale of the model
+            material.dashSize = 0.5;
+            material.gapSize = 0.5;
+          }
 
           this.viewer.getRenderer().setMaterial([match[0]], material);
 
