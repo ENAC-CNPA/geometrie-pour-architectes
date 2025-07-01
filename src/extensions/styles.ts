@@ -17,7 +17,6 @@ export class Styles extends Extension {
     const batches = this.viewer
       .getRenderer()
       .batcher.getBatches(undefined, GeometryType.LINE);
-    console.log("batches", batches);
 
     const allRenderViews: [any, LineBatch][] = []; //store renderView with its batch
 
@@ -28,23 +27,17 @@ export class Styles extends Extension {
       }
     }
 
-    console.log("allRenderViews", allRenderViews);
-
     const sketches = this.viewer.getWorldTree().findAll((node: TreeNode) => {
       return node.model.raw.isSketch === true;
     });
     for (const sketch of sketches) {
       const profiles = sketch.model.raw.Profiles;
-      console.log("Profiles:", profiles);
       for (const profile of profiles) {
         const match = allRenderViews.find(
           (renderView: any) => renderView[0]._renderData.id === profile.id
         );
         if (match) {
-          console.log("match", match);
           const material = match[1].batchMaterial;
-          console.log("material", material);
-          console.log("style", profile.displayStyle.linetype);
 
           material.linewidth = profile.displayStyle.lineweight * 1.5;
           material.worldUnits = false;
@@ -66,7 +59,6 @@ export class Styles extends Extension {
             material.gapSize = 0.2;
           }
 
-          
           if (profile.displayStyle.linetype === "DashDot") {
             material.dashed = true;
             material.dashScale = 200; // to do: adapt to the scale of the model
@@ -92,6 +84,32 @@ export class Styles extends Extension {
 
           match[1].resetDrawRanges();
         }
+      }
+    }
+
+    const allAxis = this.viewer.getWorldTree().findAll((node: TreeNode) => {
+      return node.model.raw.IsAxis === true;
+    });
+    for (const axis of allAxis) {
+      const match = allRenderViews.find(
+        (renderView: any) => renderView[0]._renderData.id === axis.model.id
+      );
+      if (match) {
+        const material = match[1].batchMaterial;
+
+        material.linewidth = 3;
+        material.worldUnits = false;
+        material.vertexColors = true;
+        material.pixelThreshold = 0.5;
+        material.resolution = new Vector2();
+        material.dashed = true;
+        material.dashScale = 200; // to do: adapt to the scale of the model
+        material.dashSize = 2;
+        material.gapSize = 0.4;
+
+        this.viewer.getRenderer().setMaterial([match[0]], material);
+
+        match[1].resetDrawRanges();
       }
     }
   }
