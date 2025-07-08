@@ -1,5 +1,12 @@
-import { Extension, IViewer, SelectionExtension } from "@speckle/viewer";
+import { Extension, IViewer, SelectionExtension, SelectionEvent } from "@speckle/viewer";
 import { Vector3 } from "three";
+
+class CustomSelectionExtension extends SelectionExtension {
+  /** Override to disable double-click behavior */
+  protected onObjectDoubleClick(_selection: SelectionEvent): void {
+    // Intentionally left blank to disable default behavior
+  }
+}
 
 export class Navigation extends Extension {
   public constructor(viewer: IViewer) {
@@ -181,8 +188,8 @@ export class Navigation extends Extension {
   private addOrientButton(cameraController: any, filtering: any) {
     const orientButton = document.createElement("button");
     this.addButton(orientButton, "./icons/Fit.html");
-    
-    const selection = this.viewer.createExtension(SelectionExtension);
+
+    const selection = this.viewer.createExtension(CustomSelectionExtension);
     selection.enabled = true;
 
     orientButton.onclick = () => {

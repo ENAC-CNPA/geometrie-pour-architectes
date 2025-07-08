@@ -154,6 +154,7 @@ header {
 }
 .dimension-text {
   background-color: white;
+  visibility: hidden;
 }
 /*CSS3D Labels : 3D Nominations*/
 .three-d-nomination {

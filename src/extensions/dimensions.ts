@@ -1,16 +1,16 @@
 import {
   Extension,
-  GeometryType,
   IViewer,
   ObjectLayers,
   SelectionEvent,
+  TreeNode
 } from "@speckle/viewer";
-import { Points, Vector3 } from "three";
+import { Vector3 } from "three";
 import {
   CSS2DRenderer,
   CSS2DObject,
 } from "three/examples/jsm/renderers/CSS2DRenderer.js";
-import { Sets } from "./sets.ts";
+import { GetPointPosition } from "./getPointPosition.ts";
 
 export class Dimensions extends Extension {
   private labelRenderer: CSS2DRenderer;
@@ -28,43 +28,36 @@ export class Dimensions extends Extension {
   }
 
   public addDimensions(ViewerEvent: any, filtering: any) {
-    const topSolidAllElements =
-      this.viewer.getWorldTree().root.model.children[0].children[0].children;
+    const sketches = this.viewer.getWorldTree().findAll((node: TreeNode) => {
+      return node.model.raw.isSketch === true;
+    });
 
-    //Import, from sets.ts, the list of app ids of objects belonging to sets, to create only their nominations
-    const sets = this.viewer.createExtension(Sets);
-    const inSetItemsAppIds = sets.findInSetsItemsAppIds();
+    const getPointPosition = this.viewer.createExtension(GetPointPosition);
 
-    const topSolidSketches = topSolidAllElements.filter(
-      (item: any) =>
-        item.raw.isSketch === true &&
-        inSetItemsAppIds.includes(Number(item.raw.applicationId))
-    );
-
-    const sketchIdsAndSketchProfilesIds: any[] = [];
-    const sketchIdsAndDimensionsProfilesIds: any[] = [];
-    
-    for (const sketch of topSolidSketches) {
-      //console.log(sketch)
-
-      const profiles = sketch.raw.Profiles;
-      
-      const sketchProfiles = profiles.filter(
-        (item: any) => item.IsSketch === "yes"
+    for (const sketch of sketches) {
+      const dimensionsProfiles = sketch.model.raw.Profiles.filter(
+        (item: any) => !item.IsSketch
       );
-      for (const profile of sketchProfiles) {
-        sketchIdsAndSketchProfilesIds.push([sketch.id, profile.id]);
+      for (const profile of dimensionsProfiles) {
+        const pos = getPointPosition.getPointPosition(profile.textPosition.id);
+        /*
+        const pos = new Vector3(
+          profile.position.x,
+          profile.position.y,
+          profile.position.z
+        )
+        */
+        if (pos) {
+          this.addDimensionText(
+            profile.value.replace(/\s*mm$/, ""),
+            profile.id,
+            pos
+          );
+        }
+        filtering.hideObjects([profile.id]);
       }
 
-      const dimensionsLinesProfiles = profiles.filter(
-        (item: any) => !item.IsSketch && !item.position
-      );
-      for (const profile of dimensionsLinesProfiles) {
-        //console.log(profile.id)
-        filtering.hideObjects([profile.id]); //filtering semble ne pas fonctionner pour des parties d'objets mais que sur l'objet entier
-        sketchIdsAndDimensionsProfilesIds.push([sketch.id, profile.id]);
-      }
-
+      /*
       const dimensionsTextsIds: string[] = [];
       const dimensionsTextsProfiles = profiles.filter(
         (item: any) => !item.IsSketch && "position" in item
@@ -80,6 +73,7 @@ export class Dimensions extends Extension {
         this.addDimensionText(profile.value.replace(/\s*mm$/, ""), pos, id);
       }
       //filtering.hideObjects(dimensionsTextsIds);
+      */
     }
 
     this.viewer.on(
@@ -87,14 +81,36 @@ export class Dimensions extends Extension {
       (event: SelectionEvent | null) => {
         if (!event) return;
         const doubleClickedNode = event.hits[0].node;
-        const sketchProfileId = doubleClickedNode.model.id
-        const sketchId = sketchIdsAndSketchProfilesIds.find(([_, second]) => second === sketchProfileId);
-        //console.log(sketchId?.[0])
+        if (doubleClickedNode.parent.model.raw.isSketch === true) {
+          const parentCollection = doubleClickedNode.parent;
+          const dimensionsProfiles = parentCollection.model.raw.Profiles.filter(
+            (item: any) => !item.IsSketch
+          );
+          for (const profile of dimensionsProfiles) {
+            const filteringState = filtering.filteringState;
+            let shouldTextVisible = false;
+            if (filteringState.hiddenObjects.includes(profile.id)) {
+              filtering.showObjects([profile.id]);
+              shouldTextVisible = true;
+            } else {
+              filtering.hideObjects([profile.id]);
+              shouldTextVisible = false;
+            }
+
+            const dimensionsTexts = document.getElementsByClassName(
+              "dimension-text-id-" + profile.id
+            );
+            for (const dimensionText of dimensionsTexts) {
+              (dimensionText as HTMLElement).style.visibility =
+                shouldTextVisible ? "visible" : "hidden";
+            }
+          }
+        }
       }
     );
   }
 
-  private addDimensionText(value: string, pos: Vector3, id: string) {
+  private addDimensionText(value: string, id: string, pos: Vector3) {
     const dimensionTextDiv = document.createElement("div");
     dimensionTextDiv.textContent = value;
     dimensionTextDiv.classList.add("dimension-text");

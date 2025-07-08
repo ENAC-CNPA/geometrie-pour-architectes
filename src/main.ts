@@ -11,19 +11,19 @@ import {
   showLoadingIcon,
   hideLoadingIcon,
 } from "./extensions/loading.ts";
-import { createHeader } from "./extensions/header.ts";
+//import { createHeader } from "./extensions/header.ts";
 import { createFooter } from "./extensions/footer.ts";
 import { Menu } from "./extensions/menu.ts";
 import { Sets } from "./extensions/sets.ts";
 import { PointsIconsAndNominations } from "./extensions/pointsIconsAndNominations.ts";
 import { Navigation } from "./extensions/navigation.ts";
 import { Styles } from "./extensions/styles.ts";
-//import { Dimensions } from "./extensions/dimensions.ts";
+import { Dimensions } from "./extensions/dimensions.ts";
 //import { ThreeDNominations } from "./extensions/3DNominations.ts";
 //import { Frames } from "./extensions/frames.ts";
 
 async function main() {
-  createHeader();
+  //createHeader();
   createFooter();
 
   /** Create the HTML container */
@@ -47,7 +47,7 @@ async function main() {
   const pointsIconsAndNominations = viewer.createExtension(PointsIconsAndNominations);
   const navigation = viewer.createExtension(Navigation);
   const styles = viewer.createExtension(Styles);
-  //const dimensions = viewer.createExtension(Dimensions);
+  const dimensions = viewer.createExtension(Dimensions);
   //const threeDNominations = viewer.createExtension(ThreeDNominations);
   //const frames = viewer.createExtension(Frames);
 
@@ -58,14 +58,14 @@ async function main() {
     styles.setLinesStyle();
     sets.addSets(filtering);
     navigation.addNavigation(cameraController, filtering);
-    //dimensions.addDimensions(ViewerEvent, filtering);
+    dimensions.addDimensions(ViewerEvent, filtering);
     //threeDNominations.add3DNominations();
     //frames.addFrames();
   });
 
   /** Create a loader for the speckle stream */
   const versionsUrls: string[] = [
-    "5626cd6127@a2d748d28c",
+    "5626cd6127@c1aeed29d1",
   ];
   const urls = await UrlHelper.getResourceUrls( /*Need to set the speckle project on public*/
     "https://app.speckle.systems/projects/400bc84669/models/" +
