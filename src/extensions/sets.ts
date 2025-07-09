@@ -40,7 +40,7 @@ export class Sets extends Extension {
   private receiveTopSolidItems(): any[] {
     const topSolidReceivedItems =
       this.viewer.getWorldTree().root.model.children[0].children[0].children;
-    //console.log(this.viewer.getWorldTree().root.model.children[0].children[0].children);
+    console.log(this.viewer.getWorldTree().root.model.children[0].children[0].children);
     /*
     for (const child of this.viewer.getWorldTree().root.model.children[0].children[0].children){
       if (child.raw.isSketch) {
