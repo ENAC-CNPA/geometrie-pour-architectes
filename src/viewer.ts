@@ -20,7 +20,7 @@ import { Navigation } from "./extensions/navigation.ts";
 import { Styles } from "./extensions/styles.ts";
 import { Dimensions } from "./extensions/dimensions.ts";
 import { ThreeDNominations } from "./extensions/3DNominations.ts";
-import { Frames } from "./extensions/frames.ts";
+//import { Frames } from "./extensions/frames.ts";
 
 async function main() {
   //createHeader();
@@ -41,7 +41,6 @@ async function main() {
   const filtering = viewer.createExtension(FilteringExtension);
 
   /**Add custom extensions */
-  //const styles = viewer.createExtension(Styles);
   const menu = viewer.createExtension(Menu);
   const sets = viewer.createExtension(Sets);
   const pointsIconsAndNominations = viewer.createExtension(
@@ -51,7 +50,7 @@ async function main() {
   const styles = viewer.createExtension(Styles);
   const dimensions = viewer.createExtension(Dimensions);
   const threeDNominations = viewer.createExtension(ThreeDNominations);
-  const frames = viewer.createExtension(Frames);
+  //const frames = viewer.createExtension(Frames);
 
   /**Run custom extensions */
   viewer.on(ViewerEvent.LoadComplete, async () => {
@@ -61,7 +60,7 @@ async function main() {
     sets.addSets(filtering);
     navigation.addNavigation(cameraController, filtering);
     dimensions.addDimensions(ViewerEvent, filtering);
-    //threeDNominations.add3DNominations();
+    threeDNominations.add3DNominations();
     //frames.addFrames();
   });
 

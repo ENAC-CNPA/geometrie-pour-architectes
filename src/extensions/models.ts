@@ -1,9 +1,9 @@
 export const models = [
     {
         name: "Modèle 1",
-        speckleUrl: "5626cd6127@24f9df63bf"
+        speckleUrl: "5626cd6127@9040fdc867"
     },{
         name: "Modèle 2",
-        speckleUrl: "5626cd6127@955a5d791a"
+        speckleUrl: "5626cd6127@e35c30dd70"
     },
 ]
