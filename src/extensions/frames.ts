@@ -1,13 +1,8 @@
-import { IViewer, Extension, ObjectLayers } from "@speckle/viewer";
+import { Extension, ObjectLayers } from "@speckle/viewer";
 import { Vector3, ArrowHelper, Object3D, Group } from "three";
 import { ConstantScale } from "./constantScale.ts";
 
 export class Frames extends Extension {
-  public constructor(viewer: IViewer) {
-    super(viewer);
-    this.viewer.getRenderer();
-  }
-
   public addFrames() {
     const arrowX = new ArrowHelper(
       new Vector3(1, 0, 0),
@@ -53,7 +48,7 @@ export class Frames extends Extension {
       .scene.getObjectByName("frame") as Object3D;
 
     if (typeof frame !== "undefined") {
-      constantScale.constantScale(frame);
+      constantScale.constantScale(frame, 50);
     }
   }
 }
