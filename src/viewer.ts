@@ -57,11 +57,11 @@ async function main() {
     menu.addMenu();
     pointsIconsAndNominations.addPointsIconsAndNominations();
     styles.setLinesStyle();
+    frames.addFrames(filtering);
     sets.addSets(filtering);
     navigation.addNavigation(cameraController, filtering);
     dimensions.addDimensions(ViewerEvent, filtering);
     threeDNominations.add3DNominations();
-    frames.addFrames(filtering);
   });
 
   /** Create a loader for the speckle stream */

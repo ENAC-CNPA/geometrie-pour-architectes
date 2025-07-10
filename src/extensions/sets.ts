@@ -29,6 +29,7 @@
     } */
 
 import { Extension, IViewer } from "@speckle/viewer";
+import { Object3D } from "three";
 
 export class Sets extends Extension {
   public constructor(viewer: IViewer) {
@@ -352,16 +353,38 @@ export class Sets extends Extension {
     checkbox: HTMLInputElement,
     filtering: any
   ) {
+    const isFrame = this.viewer.getWorldTree().findId(speckleId)![0].model.raw
+      .IsFrame as string | null;
+
     if (checkbox.checked) {
       filtering.showObjects([speckleId]);
+
+      if (isFrame) {
+        const threeObjectName = "frame-" + speckleId;
+        const threeObject = this.viewer
+          .getRenderer()
+          .scene.getObjectByName(threeObjectName) as Object3D;
+        threeObject.visible = true;
+      }
     } else {
       filtering.hideObjects([speckleId]);
+
+      if (isFrame) {
+        const threeObjectName = "frame-" + speckleId;
+        const threeObject = this.viewer
+          .getRenderer()
+          .scene.getObjectByName(threeObjectName) as Object3D;
+        threeObject.visible = false;
+      }
     }
     //this.viewer.getRenderer().shadowcatcher!.shadowcatcherPass.needsUpdate = true;
   }
 
   /**Show/hide nominations */
-  private showOrHidePointsIconsAndNominations(checkbox: HTMLInputElement, speckleId: string) {
+  private showOrHidePointsIconsAndNominations(
+    checkbox: HTMLInputElement,
+    speckleId: string
+  ) {
     const shouldVisible = checkbox.checked;
     const nominations = document.getElementsByClassName(
       "nomination-id-" + speckleId

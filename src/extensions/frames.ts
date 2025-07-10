@@ -7,6 +7,7 @@ import {
   ColorRepresentation,
 } from "three";
 import { ConstantScale } from "./constantScale.ts";
+import { Sets } from "./sets.ts";
 
 export class Frames extends Extension {
   private createArrow(frameV: any, color: ColorRepresentation) {
@@ -36,9 +37,15 @@ export class Frames extends Extension {
   }
 
   public addFrames(filtering: any) {
-    const frames = this.viewer.getWorldTree().findAll((node: TreeNode) => {
+    const allFrames = this.viewer.getWorldTree().findAll((node: TreeNode) => {
       return node.model.raw.IsFrame === true;
     });
+    const sets = this.viewer.createExtension(Sets);
+    const inSetItemsAppIds = sets.findInSetsItemsAppIds();
+    const frames = allFrames.filter((item: any) =>
+      inSetItemsAppIds.includes(Number(item.model.raw.applicationId))
+    );
+
     for (const frame of frames) {
       const frameObject = new Group();
 
@@ -74,7 +81,6 @@ export class Frames extends Extension {
 
       frameObject.name = "frame-" + frame.model.id;
       this.setLayerRecursive(frameObject, ObjectLayers.OVERLAY);
-
       this.viewer.getRenderer().scene.add(frameObject);
     }
   }
