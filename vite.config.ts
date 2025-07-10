@@ -1,6 +1,13 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "/geometrie-pour-architectes/"
+  base: "/geometrie-pour-architectes/",
+  build: {
+    rollupOptions: {
+      input: {
+        main: "index.html",
+        viewer: "viewer.html",
+      },
+    },
+  },
 });
