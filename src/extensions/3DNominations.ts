@@ -34,11 +34,11 @@ export class ThreeDNominations extends Extension {
 
       for (const profile of sketchProfiles) {
         if ("segmentName" in profile) {
-
           const threeDNominationContainer = document.createElement("div");
           threeDNominationContainer.className = "three-d-nomination-container";
           if (profile.segmentNameDirectionInverted === true) {
-            threeDNominationContainer.className = "three-d-nomination-container-inverted";
+            threeDNominationContainer.className =
+              "three-d-nomination-container-inverted";
           }
           const threeDNomination = document.createElement("p");
           threeDNomination.className = "three-d-nomination";
@@ -76,6 +76,7 @@ export class ThreeDNominations extends Extension {
             objectCSS.rotateZ(-Math.PI);
           }
 
+          objectCSS.name = "object-css-" + profile.id;
           objectCSS.layers.set(ObjectLayers.OVERLAY);
           this.viewer.getRenderer().scene.add(objectCSS);
         }

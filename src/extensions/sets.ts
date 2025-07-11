@@ -47,7 +47,8 @@ export class Sets extends Extension {
       if (child.raw.isSketch) {
         console.log(child)
       }
-    }*/
+    }
+      */
     return topSolidReceivedItems;
   }
 
@@ -355,6 +356,8 @@ export class Sets extends Extension {
   ) {
     const isFrame = this.viewer.getWorldTree().findId(speckleId)![0].model.raw
       .IsFrame as string | null;
+    const isSketch = this.viewer.getWorldTree().findId(speckleId)![0].model.raw
+      .isSketch as boolean | null;
 
     if (checkbox.checked) {
       filtering.showObjects([speckleId]);
@@ -365,6 +368,18 @@ export class Sets extends Extension {
           .getRenderer()
           .scene.getObjectByName(threeObjectName) as Object3D;
         threeObject.visible = true;
+      } else if (isSketch) {
+        const profiles = this.viewer.getWorldTree().findId(speckleId)![0].model
+          .raw.Profiles;
+        for (const profile of profiles) {
+          const threeObjectCSSName = "object-css-" + profile.id;
+          const threeObjectCSS = this.viewer
+            .getRenderer()
+            .scene.getObjectByName(threeObjectCSSName) as Object3D | null;
+          if (threeObjectCSS) {
+            threeObjectCSS.visible = true;
+          }
+        }
       }
     } else {
       filtering.hideObjects([speckleId]);
@@ -375,6 +390,18 @@ export class Sets extends Extension {
           .getRenderer()
           .scene.getObjectByName(threeObjectName) as Object3D;
         threeObject.visible = false;
+      } else if (isSketch) {
+        const profiles = this.viewer.getWorldTree().findId(speckleId)![0].model
+          .raw.Profiles;
+        for (const profile of profiles) {
+          const threeObjectCSSName = "object-css-" + profile.id;
+          const threeObjectCSS = this.viewer
+            .getRenderer()
+            .scene.getObjectByName(threeObjectCSSName) as Object3D | null;
+          if (threeObjectCSS) {
+            threeObjectCSS.visible = false;
+          }
+        }
       }
     }
     //this.viewer.getRenderer().shadowcatcher!.shadowcatcherPass.needsUpdate = true;
