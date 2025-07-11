@@ -157,6 +157,13 @@ header {
   visibility: hidden;
 }
 /*CSS3D Labels : 3D Nominations*/
+.three-d-nomination-container {
+  padding-bottom: 12px;
+}
+.three-d-nomination-container-inverted {
+  padding-bottom: 0;
+  padding-top: 12px;
+}
 .three-d-nomination {
   font-family: "Times New Roman", Times, serif;
   font-style: italic;

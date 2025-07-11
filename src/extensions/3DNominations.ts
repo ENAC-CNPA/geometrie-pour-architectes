@@ -34,17 +34,23 @@ export class ThreeDNominations extends Extension {
 
       for (const profile of sketchProfiles) {
         if ("segmentName" in profile) {
-          /*
-          console.log(profile.namePosDirSegment);
-          console.log(profile.namePosPointSegment);
-          console.log(profile.segmentName);
-          console.log(profile.segmentNameColor);
-          console.log(profile.segmentNameDirectionInverted);
-          */
 
-          const threeDNomination = document.createElement("div");
+          const threeDNominationContainer = document.createElement("div");
+          threeDNominationContainer.className = "three-d-nomination-container";
+          if (profile.segmentNameDirectionInverted === true) {
+            threeDNominationContainer.className = "three-d-nomination-container-inverted";
+          }
+          const threeDNomination = document.createElement("p");
           threeDNomination.className = "three-d-nomination";
           threeDNomination.innerHTML = profile.segmentName;
+          threeDNomination.style.color = `#${(
+            (profile.segmentNameColor >>> 0) &
+            0xffffff
+          )
+            .toString(16)
+            .padStart(6, "0")}`;
+          threeDNomination.style.fontFamily = profile.segmentNameFont;
+          threeDNominationContainer.appendChild(threeDNomination);
 
           const origin = new Vector3(
             profile.namePosPointSegment.x,
@@ -52,7 +58,7 @@ export class ThreeDNominations extends Extension {
             profile.namePosPointSegment.z
           );
 
-          const objectCSS = new CSS3DObject(threeDNomination);
+          const objectCSS = new CSS3DObject(threeDNominationContainer);
           objectCSS.scale.set(1, 1, 1);
           objectCSS.position.copy(origin);
 
@@ -62,10 +68,13 @@ export class ThreeDNominations extends Extension {
             profile.namePosDirSegment.z
           );
 
-          const target = new Vector3().addVectors(origin, direction);
-
+          let target = new Vector3().addVectors(origin, direction);
           objectCSS.lookAt(target);
           objectCSS.rotateY(-Math.PI / 2);
+          if (profile.segmentNameDirectionInverted === true) {
+            objectCSS.rotateX(-Math.PI);
+            objectCSS.rotateZ(-Math.PI);
+          }
 
           objectCSS.layers.set(ObjectLayers.OVERLAY);
           this.viewer.getRenderer().scene.add(objectCSS);
