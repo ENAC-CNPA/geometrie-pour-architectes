@@ -64,6 +64,9 @@ export class Frames extends Extension {
 
       for (const child of frame.children) {
         filtering.hideObjects([child.model.id]);
+        //const speckleObject = this.viewer.getWorldTree().findId(child.model.id)![0];
+        //console.log(speckleObject)
+        //speckleObject.transformTRS( { x: 10, y: 0, z: 5 } )
         if (child.model.raw.FrameDir === "XY") {
           const frameVX = child.model.raw.FrameVX;
           const arrowX = this.createArrow(frameVX, 0xff0000);
