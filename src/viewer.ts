@@ -11,19 +11,20 @@ import {
   showLoadingIcon,
   hideLoadingIcon,
 } from "./extensions/loading.ts";
-//import { createHeader } from "./extensions/header.ts";
+import { createHeader } from "./extensions/header.ts";
 import { createFooter } from "./extensions/footer.ts";
 import { Menu } from "./extensions/menu.ts";
 import { Sets } from "./extensions/sets.ts";
 import { PointsIconsAndNominations } from "./extensions/pointsIconsAndNominations.ts";
 import { Navigation } from "./extensions/navigation.ts";
-import { Styles } from "./extensions/styles.ts";
+import { Styles } from "./extensions/linesStyles.ts";
 import { Dimensions } from "./extensions/dimensions.ts";
 import { ThreeDNominations } from "./extensions/3DNominations.ts";
 import { Frames } from "./extensions/frames.ts";
+import { SelectNonSpeckle } from "./extensions/selectNonSpeckle.ts";
 
 async function main() {
-  //createHeader();
+  createHeader();
   createFooter();
 
   /** Create the HTML container */
@@ -51,6 +52,7 @@ async function main() {
   const dimensions = viewer.createExtension(Dimensions);
   const threeDNominations = viewer.createExtension(ThreeDNominations);
   const frames = viewer.createExtension(Frames);
+  const selectNonSpeckle = viewer.createExtension(SelectNonSpeckle);
 
   /**Run custom extensions */
   viewer.on(ViewerEvent.LoadComplete, async () => {
@@ -58,6 +60,7 @@ async function main() {
     pointsIconsAndNominations.addPointsIconsAndNominations();
     styles.setLinesStyle();
     frames.addFrames(filtering);
+    selectNonSpeckle.selectNonSpeckle();
     sets.addSets(filtering);
     navigation.addNavigation(cameraController, filtering);
     dimensions.addDimensions(ViewerEvent, filtering);

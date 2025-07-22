@@ -5,6 +5,9 @@ import {
   Object3D,
   Group,
   ColorRepresentation,
+  BufferGeometry,
+  LineBasicMaterial,
+  Line,
 } from "three";
 import { ConstantScale } from "./constantScale.ts";
 import { Sets } from "./sets.ts";
@@ -20,15 +23,34 @@ export class Frames extends Extension {
     const dirY = parseFloat(dirAsArray[1].replace(",", "."));
     const dirZ = parseFloat(dirAsArray[2].replace(",", "."));
 
+    const localDir = new Vector3(dirX, dirY, dirZ);
+
     const arrow = new ArrowHelper(
-      new Vector3(dirX, dirY, dirZ),
+      localDir,
       new Vector3(0, 0, 0),
       1,
       color,
       0.2,
       0.1
     );
-    return arrow;
+    return [arrow, localDir];
+  }
+  private createSquare(dirX: Vector3, dirY: Vector3){
+    const sideLength = 0.4;
+    const dir1 = dirX.clone().normalize().multiplyScalar(sideLength);
+    const dir2 = dirY.clone().normalize().multiplyScalar(sideLength);
+
+    const p1 = new Vector3(0, 0, 0);
+    const p2 = p1.clone().add(dir1);
+    const p3 = p2.clone().add(dir2);
+    const p4 = p1.clone().add(dir2);
+
+    const points = [p2, p3, p4];
+    const geometry = new BufferGeometry().setFromPoints(points);
+    const material = new LineBasicMaterial({ color: 0xcccccc });
+    const square = new Line(geometry, material);
+
+    return square;
   }
 
   private setLayerRecursive(obj: Object3D, layer: number) {
@@ -61,26 +83,43 @@ export class Frames extends Extension {
       const originZ = parseFloat(originAsArray[2].replace(",", "."));
 
       frameObject.position.set(originX, originY, originZ);
+      let dirX = new Vector3();
+      let dirY = new Vector3();
+      let dirZ = new Vector3();
 
-      for (const child of frame.children) {
-        filtering.hideObjects([child.model.id]);
-        //const speckleObject = this.viewer.getWorldTree().findId(child.model.id)![0];
-        //console.log(speckleObject)
-        //speckleObject.transformTRS( { x: 10, y: 0, z: 5 } )
-        if (child.model.raw.FrameDir === "XY") {
-          const frameVX = child.model.raw.FrameVX;
-          const arrowX = this.createArrow(frameVX, 0xff0000);
+      for (const plane of frame.children) {
+        filtering.hideObjects([plane.model.id]);
+
+        if (plane.model.raw.FrameDir === "XY") {
+          const frameVX = plane.model.raw.FrameVX;
+          const [arrowX, dir] = this.createArrow(frameVX, 0xff0000) as [
+            ArrowHelper,
+            Vector3
+          ];
           frameObject.add(arrowX);
-        } else if (child.model.raw.FrameDir === "YZ") {
-          const frameVY = child.model.raw.FrameVY;
-          const arrowY = this.createArrow(frameVY, 0x00ff00);
+          dirX = dir;
+        } else if (plane.model.raw.FrameDir === "YZ") {
+          const frameVY = plane.model.raw.FrameVY;
+          const [arrowY, dir] = this.createArrow(frameVY, 0x00ff00) as [
+            ArrowHelper,
+            Vector3
+          ];
           frameObject.add(arrowY);
-        } else if (child.model.raw.FrameDir === "XZ") {
-          const frameVZ = child.model.raw.FrameVZ;
-          const arrowZ = this.createArrow(frameVZ, 0x0000ff);
+          dirY = dir;
+        } else if (plane.model.raw.FrameDir === "XZ") {
+          const frameVZ = plane.model.raw.FrameVZ;
+          const [arrowZ, dir] = this.createArrow(frameVZ, 0x0000ff) as [
+            ArrowHelper,
+            Vector3
+          ];
           frameObject.add(arrowZ);
+          dirZ = dir;
         }
       }
+      const squareXY = this.createSquare(dirX, dirY)
+      const squareXZ = this.createSquare(dirX, dirZ)
+      const squareYZ = this.createSquare(dirY, dirZ)
+      frameObject.add(squareXY, squareXZ, squareYZ);
 
       frameObject.name = "frame-" + frame.model.id;
       this.setLayerRecursive(frameObject, ObjectLayers.OVERLAY);
@@ -105,3 +144,9 @@ export class Frames extends Extension {
     });
   }
 }
+
+/*
+Exemples :
+1 repère : ee4426fb20
+2 repères : c27e6330d7
+*/

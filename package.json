@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@speckle/viewer": "^2.21.1",
-    "three": "^0.169.0"
+    "three": "^0.169.0",
+    "tweakpane": "^4.0.5"
   }
 }
