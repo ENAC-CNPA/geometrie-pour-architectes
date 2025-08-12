@@ -45,6 +45,7 @@ export class PointsIconsAndNominations extends Extension {
       for (const vertex of vertices) {
         filtering.hideObjects([vertex.id]);
         const id = sketch.id;
+        const nominationFont = vertex.vertexFont;
         const nominationColor = vertex.vertexColor ?? 0;
         /** Get the position of the point in the 3D space, see function below*/
         const pos = this.getPointPosition(vertex.id);
@@ -55,6 +56,7 @@ export class PointsIconsAndNominations extends Extension {
           /** Get the position of the text relatively to the point on the 2D screen*/
           if (pos)
             this.addNomination(
+              nominationFont,
               nominationColor,
               vertex.vertexName,
               pos,
@@ -117,6 +119,7 @@ export class PointsIconsAndNominations extends Extension {
   }
 
   private addNomination(
+    font: string,
     color: number,
     title: string,
     pos: Vector3,
@@ -127,6 +130,7 @@ export class PointsIconsAndNominations extends Extension {
     nominationDiv.textContent = title;
     nominationDiv.classList.add("nomination");
     nominationDiv.classList.add("nomination-id-" + id);
+    nominationDiv.style.fontFamily = font;
     nominationDiv.style.color = `#${((color >>> 0) & 0xffffff)
       .toString(16)
       .padStart(6, "0")}`;

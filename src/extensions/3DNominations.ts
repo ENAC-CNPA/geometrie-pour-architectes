@@ -35,11 +35,14 @@ export class ThreeDNominations extends Extension {
 
       for (const profile of sketchProfiles) {
         if ("segmentName" in profile) {
+          const fontSize =
+            Number(profile.segmentNameSize.replace(",", ".")) * 2500;
           const threeDNominationContainer = document.createElement("div");
-          threeDNominationContainer.className = "three-d-nomination-container";
+          threeDNominationContainer.style.paddingBottom = fontSize.toString() + "px";
+          threeDNominationContainer.style.paddingTop = "0px";
           if (profile.segmentNameDirectionInverted === true) {
-            threeDNominationContainer.className =
-              "three-d-nomination-container-inverted";
+            threeDNominationContainer.style.paddingBottom = "0px";
+            threeDNominationContainer.style.paddingTop = fontSize.toString() + "px";
           }
           const threeDNomination = document.createElement("p");
           threeDNomination.className = "three-d-nomination";
@@ -51,18 +54,14 @@ export class ThreeDNominations extends Extension {
             .toString(16)
             .padStart(6, "0")}`;
           threeDNomination.style.fontFamily = profile.segmentNameFont;
-          threeDNomination.style.fontSize =
-            (
-              Number(profile.segmentNameSize.replace(",", ".")) * 2500
-            ).toString() + "px";
-          if (profile.segmentNameStyle.includes("Bold")){
-            threeDNomination.style.fontWeight = "bold"
+          threeDNomination.style.fontSize = fontSize.toString() + "px";
+          if (profile.segmentNameStyle.includes("Bold")) {
+            threeDNomination.style.fontWeight = "bold";
           }
-          if (profile.segmentNameStyle.includes("Regular")){
-            threeDNomination.style.fontStyle = "normal"
-          }
-          else if (profile.segmentNameStyle.includes("Italic")){
-            threeDNomination.style.fontStyle = "italic"
+          if (profile.segmentNameStyle.includes("Regular")) {
+            threeDNomination.style.fontStyle = "normal";
+          } else if (profile.segmentNameStyle.includes("Italic")) {
+            threeDNomination.style.fontStyle = "italic";
           }
           threeDNominationContainer.appendChild(threeDNomination);
 
