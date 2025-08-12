@@ -26,7 +26,7 @@ export class PointsIconsAndNominations extends Extension {
     speckleContainer.append(this.labelRenderer.domElement);
   }
 
-  public addPointsIconsAndNominations() {
+  public addPointsIconsAndNominations(filtering: any) {
     const topSolidAllElements =
       this.viewer.getWorldTree().root.model.children[0].children[0].children;
 
@@ -43,6 +43,7 @@ export class PointsIconsAndNominations extends Extension {
     for (const sketch of topSolidSketches) {
       const vertices = sketch.raw.Vertices;
       for (const vertex of vertices) {
+        filtering.hideObjects([vertex.id]);
         const id = sketch.id;
         const nominationColor = vertex.vertexColor ?? 0;
         /** Get the position of the point in the 3D space, see function below*/
@@ -52,25 +53,32 @@ export class PointsIconsAndNominations extends Extension {
           /** Get the position of the text relatively to the point on the 2D screen*/
           pad.push(vertex.namePosVector.x, vertex.namePosVector.y);
           /** Get the position of the text relatively to the point on the 2D screen*/
-          if (pos) this.addNomination(nominationColor, vertex.vertexName, pos, pad, id);
+          if (pos)
+            this.addNomination(
+              nominationColor,
+              vertex.vertexName,
+              pos,
+              pad,
+              id
+            );
         }
-        if (pos)  this.addPointIcon(vertex.displayStyle.color, "◦", pos, id);
+        if (pos)
+          this.addPointIcon(vertex.displayStyle.color, "◦", "28px", pos, id);
       }
     }
 
     const topSolidPoints = topSolidAllElements.filter(
       (item: any) =>
-        item.raw.isPoint === true &&
+        item.raw.IsPoint === "true" &&
         inSetItemsAppIds.includes(Number(item.raw.applicationId))
     );
 
     for (const point of topSolidPoints) {
-        const id = point.id;
-        /** Get the position of the point in the 3D space, see function below*/
-        const pos = this.getPointPosition(point.id);
-        if (pos)  this.addPointIcon(point.displayStyle.color, "◦", pos, id);
+      const id = point.id;
+      const pos = this.getPointPosition(point.id);
+      if (pos)
+        this.addPointIcon(point.raw.displayStyle.color, "•", "20px", pos, id);
     }
-
   }
 
   private getPointPosition(id: string): Vector3 | undefined {
@@ -108,12 +116,20 @@ export class PointsIconsAndNominations extends Extension {
     );
   }
 
-  private addNomination(color:number, title: string, pos: Vector3, pad: number[], id: string) {
+  private addNomination(
+    color: number,
+    title: string,
+    pos: Vector3,
+    pad: number[],
+    id: string
+  ) {
     const nominationDiv = document.createElement("div");
     nominationDiv.textContent = title;
     nominationDiv.classList.add("nomination");
     nominationDiv.classList.add("nomination-id-" + id);
-    nominationDiv.style.color = `#${(color >>> 0 & 0xFFFFFF).toString(16).padStart(6, '0')}`;
+    nominationDiv.style.color = `#${((color >>> 0) & 0xffffff)
+      .toString(16)
+      .padStart(6, "0")}`;
     const paddingX = pad[0];
     if (paddingX < 0) {
       nominationDiv.style.paddingRight = (-pad[0] * 8).toString() + "px";
@@ -132,12 +148,21 @@ export class PointsIconsAndNominations extends Extension {
     this.viewer.getRenderer().scene.add(nominationLabel);
   }
 
-  private addPointIcon(color: number, icon: string, pos: Vector3, id: string) {
+  private addPointIcon(
+    color: number,
+    icon: string,
+    fontSize: string,
+    pos: Vector3,
+    id: string
+  ) {
     const pointIconDiv = document.createElement("div");
     pointIconDiv.textContent = icon;
+    pointIconDiv.style.fontSize = fontSize;
     pointIconDiv.classList.add("point-icon");
     pointIconDiv.classList.add("point-icon-id-" + id);
-    pointIconDiv.style.color = `#${(color >>> 0 & 0xFFFFFF).toString(16).padStart(6, '0')}`;
+    pointIconDiv.style.color = `#${((color >>> 0) & 0xffffff)
+      .toString(16)
+      .padStart(6, "0")}`;
     const pointIconLabel = new CSS2DObject(pointIconDiv);
     pointIconLabel.position.copy(pos);
     pointIconLabel.layers.set(ObjectLayers.OVERLAY);

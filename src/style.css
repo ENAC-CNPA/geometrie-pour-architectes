@@ -148,10 +148,6 @@ header {
   font-style: italic;
   font-size: 25px;
 }
-.point-icon {
-  font-size: 27px;
-  font-weight: bolder;
-}
 .dimension-text {
   background-color: white;
   visibility: hidden;

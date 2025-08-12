@@ -57,7 +57,7 @@ async function main() {
   /**Run custom extensions */
   viewer.on(ViewerEvent.LoadComplete, async () => {
     menu.addMenu();
-    pointsIconsAndNominations.addPointsIconsAndNominations();
+    pointsIconsAndNominations.addPointsIconsAndNominations(filtering);
     styles.setLinesStyle();
     frames.addFrames(filtering);
     selectNonSpeckle.selectNonSpeckle();
