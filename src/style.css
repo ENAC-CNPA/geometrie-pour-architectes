@@ -143,11 +143,6 @@ header {
   font-weight: bold;
 }
 /*CSS2D Labels : 2D Nominations, Points Icons, Dimensions Texts*/
-.nomination {
-  font-family: "Times New Roman", Times, serif;
-  font-style: italic;
-  font-size: 25px;
-}
 .dimension-text {
   background-color: white;
   visibility: hidden;

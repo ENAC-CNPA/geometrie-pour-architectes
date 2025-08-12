@@ -26,6 +26,7 @@ export class ThreeDNominations extends Extension {
       return node.model.raw.isSketch === true;
     });
     for (const sketch of sketches) {
+      console.log(sketch);
       const profiles = sketch.model.raw.Profiles;
 
       const sketchProfiles = profiles.filter(
@@ -50,6 +51,19 @@ export class ThreeDNominations extends Extension {
             .toString(16)
             .padStart(6, "0")}`;
           threeDNomination.style.fontFamily = profile.segmentNameFont;
+          threeDNomination.style.fontSize =
+            (
+              Number(profile.segmentNameSize.replace(",", ".")) * 2500
+            ).toString() + "px";
+          if (profile.segmentNameStyle.includes("Bold")){
+            threeDNomination.style.fontWeight = "bold"
+          }
+          if (profile.segmentNameStyle.includes("Regular")){
+            threeDNomination.style.fontStyle = "normal"
+          }
+          else if (profile.segmentNameStyle.includes("Italic")){
+            threeDNomination.style.fontStyle = "italic"
+          }
           threeDNominationContainer.appendChild(threeDNomination);
 
           const origin = new Vector3(
