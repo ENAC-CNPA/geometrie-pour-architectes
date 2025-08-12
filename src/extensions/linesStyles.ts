@@ -122,6 +122,8 @@ export class Styles extends Extension {
       if (match) {
         const material = match[1].batchMaterial;
 
+        const length = axis.model.raw.length
+
         material.linewidth = 3;
         material.worldUnits = false;
         material.vertexColors = true;
@@ -129,8 +131,8 @@ export class Styles extends Extension {
         material.resolution = new Vector2();
         material.dashed = true;
         material.dashScale = dashScale;
-        material.dashSize = 2;
-        material.gapSize = 0.4;
+        material.dashSize = 8 * length;
+        material.gapSize = 1.6 * length;
 
         this.viewer.getRenderer().setMaterial([match[0]], material);
 
