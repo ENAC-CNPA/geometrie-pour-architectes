@@ -40,40 +40,17 @@ export class Dimensions extends Extension {
       );
       for (const profile of dimensionsProfiles) {
         const pos = getPointPosition.getPointPosition(profile.textPosition.id);
-        /*
-        const pos = new Vector3(
-          profile.position.x,
-          profile.position.y,
-          profile.position.z
-        )
-        */
+        
         if (pos) {
           this.addDimensionText(
             profile.value.replace(/\s*mm$/, ""),
+            sketch.model.id,
             profile.id,
             pos
           );
         }
         filtering.hideObjects([profile.id]);
       }
-
-      /*
-      const dimensionsTextsIds: string[] = [];
-      const dimensionsTextsProfiles = profiles.filter(
-        (item: any) => !item.IsSketch && "position" in item
-      );
-      for (const profile of dimensionsTextsProfiles) {
-        dimensionsTextsIds.push(profile.id);
-        const pos = new Vector3(
-          profile.position.x,
-          profile.position.y,
-          profile.position.z
-        );
-        const id = sketch.id;
-        this.addDimensionText(profile.value.replace(/\s*mm$/, ""), pos, id);
-      }
-      //filtering.hideObjects(dimensionsTextsIds);
-      */
     }
 
     this.viewer.on(
@@ -110,11 +87,12 @@ export class Dimensions extends Extension {
     );
   }
 
-  private addDimensionText(value: string, id: string, pos: Vector3) {
+  private addDimensionText(value: string, sketchId: string, profileId: string, pos: Vector3) {
     const dimensionTextDiv = document.createElement("div");
     dimensionTextDiv.textContent = value;
     dimensionTextDiv.classList.add("dimension-text");
-    dimensionTextDiv.classList.add("dimension-text-id-" + id);
+    dimensionTextDiv.classList.add("dimension-text-id-" + sketchId);
+    dimensionTextDiv.classList.add("dimension-text-id-" + profileId);
     const dimensionTextLabel = new CSS2DObject(dimensionTextDiv);
     dimensionTextLabel.position.copy(pos);
     dimensionTextLabel.layers.set(ObjectLayers.OVERLAY);

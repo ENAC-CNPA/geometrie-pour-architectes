@@ -379,6 +379,10 @@ export class Sets extends Extension {
           if (threeObjectCSS) {
             threeObjectCSS.visible = true;
           }
+          //Hide dimensions lines
+          if (profile.IsSketch !== "yes") {
+            filtering.hideObjects([profile.id]);
+          }
         }
       }
     } else {
@@ -407,11 +411,8 @@ export class Sets extends Extension {
     //this.viewer.getRenderer().shadowcatcher!.shadowcatcherPass.needsUpdate = true;
   }
 
-  /**Show/hide nominations */
-  private showOrHidePointsIconsAndNominations(
-    checkbox: HTMLInputElement,
-    speckleId: string
-  ) {
+  /**Show/hide CSS2D labels = pointIcons, nominations, dimensionStexts */
+  private showOrHideCSS2D(checkbox: HTMLInputElement, speckleId: string) {
     const shouldVisible = checkbox.checked;
     const nominations = document.getElementsByClassName(
       "nomination-id-" + speckleId
@@ -429,6 +430,13 @@ export class Sets extends Extension {
         ? "visible"
         : "hidden";
     }
+
+    const dimensionsTexts = document.getElementsByClassName(
+      "dimension-text-id-" + speckleId
+    );
+    for (const dimensionText of dimensionsTexts) {
+      (dimensionText as HTMLElement).style.visibility = "hidden";
+    }
   }
 
   /**Checkbox behavior */
@@ -443,7 +451,7 @@ export class Sets extends Extension {
       const speckleId = listItem.dataset.speckleid!;
       this.updateTwinsCheckboxes(checkbox, listItems, listItem, speckleId);
       this.showOrHideObject(speckleId, checkbox, filtering);
-      this.showOrHidePointsIconsAndNominations(checkbox, speckleId);
+      this.showOrHideCSS2D(checkbox, speckleId);
     } else if (listItem.classList.contains("set")) {
       /**If indeterminate, get rid of indeterminate status */
       checkbox.indeterminate = false;
