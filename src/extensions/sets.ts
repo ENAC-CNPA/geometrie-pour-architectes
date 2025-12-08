@@ -448,10 +448,12 @@ export class Sets extends Extension {
     filtering: any[]
   ) {
     if (listItem.classList.contains("object")) {
-      const speckleId = listItem.dataset.speckleid!;
-      this.updateTwinsCheckboxes(checkbox, listItems, listItem, speckleId);
-      this.showOrHideObject(speckleId, checkbox, filtering);
-      this.showOrHideCSS2D(checkbox, speckleId);
+      const speckleId = listItem.dataset.speckleid as string | undefined;
+      if (typeof speckleId !== 'undefined'){
+        this.updateTwinsCheckboxes(checkbox, listItems, listItem, speckleId);
+        this.showOrHideObject(speckleId, checkbox, filtering);
+        this.showOrHideCSS2D(checkbox, speckleId);
+      }
     } else if (listItem.classList.contains("set")) {
       /**If indeterminate, get rid of indeterminate status */
       checkbox.indeterminate = false;
