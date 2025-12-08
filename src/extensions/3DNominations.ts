@@ -63,6 +63,16 @@ export class ThreeDNominations extends Extension {
             threeDNomination.style.fontStyle = "italic";
           }
           threeDNominationContainer.appendChild(threeDNomination);
+          
+          const type = profile.segments[0].speckle_type.split(".")[2]
+          let reverseCSS: number = 1
+          if (type === "Arc" || type === "Circle" || type === "Curve"){
+            reverseCSS = -1
+          }
+          const inverted = profile.segmentNameDirectionInverted
+          if (inverted === "Yes"){
+            reverseCSS = reverseCSS * -1
+          }
 
           const origin = new Vector3(
             profile.namePosPointSegment.x,
@@ -75,9 +85,9 @@ export class ThreeDNominations extends Extension {
           objectCSS.position.copy(origin);
 
           const direction = new Vector3(
-            profile.namePosDirSegment.x,
-            profile.namePosDirSegment.y,
-            profile.namePosDirSegment.z
+            profile.namePosDirSegment.x * reverseCSS,
+            profile.namePosDirSegment.y * reverseCSS,
+            profile.namePosDirSegment.z * reverseCSS
           );
 
           let target = new Vector3().addVectors(origin, direction);
