@@ -26,7 +26,6 @@ export class ThreeDNominations extends Extension {
       return node.model.raw.isSketch === true;
     });
     for (const sketch of sketches) {
-      console.log(sketch);
       const profiles = sketch.model.raw.Profiles;
 
       const sketchProfiles = profiles.filter(

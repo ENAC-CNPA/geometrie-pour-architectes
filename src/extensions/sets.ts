@@ -131,6 +131,12 @@ export class Sets extends Extension {
       const speckleId = item.id;
       if (!inSetItemsAppIds.includes(applicationId)) {
         filtering.hideObjects([speckleId]);
+        if (
+          this.viewer.getWorldTree().findId(speckleId)![0].model.raw.isSketch
+        ) {
+          //this.showOrHideCSS2D(false, speckleId);
+          this.showOrHideCSS3D(speckleId, false);
+        }
       }
     }
   }
@@ -369,17 +375,12 @@ export class Sets extends Extension {
           .scene.getObjectByName(threeObjectName) as Object3D;
         threeObject.visible = true;
       } else if (isSketch) {
+        this.showOrHideCSS3D(speckleId, true);
+
+        //Hide dimensions lines
         const profiles = this.viewer.getWorldTree().findId(speckleId)![0].model
           .raw.Profiles;
         for (const profile of profiles) {
-          const threeObjectCSSName = "object-css-" + profile.id;
-          const threeObjectCSS = this.viewer
-            .getRenderer()
-            .scene.getObjectByName(threeObjectCSSName) as Object3D | null;
-          if (threeObjectCSS) {
-            threeObjectCSS.visible = true;
-          }
-          //Hide dimensions lines
           if (profile.IsSketch !== "yes") {
             filtering.hideObjects([profile.id]);
           }
@@ -395,25 +396,14 @@ export class Sets extends Extension {
           .scene.getObjectByName(threeObjectName) as Object3D;
         threeObject.visible = false;
       } else if (isSketch) {
-        const profiles = this.viewer.getWorldTree().findId(speckleId)![0].model
-          .raw.Profiles;
-        for (const profile of profiles) {
-          const threeObjectCSSName = "object-css-" + profile.id;
-          const threeObjectCSS = this.viewer
-            .getRenderer()
-            .scene.getObjectByName(threeObjectCSSName) as Object3D | null;
-          if (threeObjectCSS) {
-            threeObjectCSS.visible = false;
-          }
-        }
+        this.showOrHideCSS3D(speckleId, false);
       }
     }
     //this.viewer.getRenderer().shadowcatcher!.shadowcatcherPass.needsUpdate = true;
   }
 
   /**Show/hide CSS2D labels = pointIcons, nominations, dimensionStexts */
-  private showOrHideCSS2D(checkbox: HTMLInputElement, speckleId: string) {
-    const shouldVisible = checkbox.checked;
+  private showOrHideCSS2D(shouldVisible: boolean, speckleId: string) {
     const nominations = document.getElementsByClassName(
       "nomination-id-" + speckleId
     );
@@ -430,12 +420,25 @@ export class Sets extends Extension {
         ? "visible"
         : "hidden";
     }
-
     const dimensionsTexts = document.getElementsByClassName(
       "dimension-text-id-" + speckleId
     );
     for (const dimensionText of dimensionsTexts) {
       (dimensionText as HTMLElement).style.visibility = "hidden";
+    }
+  }
+
+  private showOrHideCSS3D(speckleId: string, shouldVisible: boolean) {
+    const profiles = this.viewer.getWorldTree().findId(speckleId)![0].model.raw
+      .Profiles;
+    for (const profile of profiles) {
+      const threeObjectCSSName = "object-css-" + profile.id;
+      const threeObjectCSS = this.viewer
+        .getRenderer()
+        .scene.getObjectByName(threeObjectCSSName) as Object3D | null;
+      if (threeObjectCSS) {
+        threeObjectCSS.visible = shouldVisible;
+      }
     }
   }
 
@@ -449,10 +452,10 @@ export class Sets extends Extension {
   ) {
     if (listItem.classList.contains("object")) {
       const speckleId = listItem.dataset.speckleid as string | undefined;
-      if (typeof speckleId !== 'undefined'){
+      if (typeof speckleId !== "undefined") {
         this.updateTwinsCheckboxes(checkbox, listItems, listItem, speckleId);
         this.showOrHideObject(speckleId, checkbox, filtering);
-        this.showOrHideCSS2D(checkbox, speckleId);
+        this.showOrHideCSS2D(checkbox.checked, speckleId);
       }
     } else if (listItem.classList.contains("set")) {
       /**If indeterminate, get rid of indeterminate status */

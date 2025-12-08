@@ -58,13 +58,13 @@ async function main() {
   viewer.on(ViewerEvent.LoadComplete, async () => {
     menu.addMenu();
     pointsIconsAndNominations.addPointsIconsAndNominations(filtering);
+    threeDNominations.add3DNominations();
     styles.setLinesStyle();
     frames.addFrames(filtering);
     selectNonSpeckle.selectNonSpeckle();
     sets.addSets(filtering);
     navigation.addNavigation(cameraController, filtering);
     dimensions.addDimensions(ViewerEvent, filtering);
-    threeDNominations.add3DNominations();
   });
 
   /** Create a loader for the speckle stream */
