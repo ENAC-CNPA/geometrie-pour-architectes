@@ -9,7 +9,7 @@ export function createFooter() {
 
   const speckleText = document.createElement("p");
   speckleText.id = "speckle-text";
-  speckleText.textContent = "Visionneuse développée avec Speckle";
+  speckleText.textContent = "Visionneuse développée avec Speckle.TopSolid";
 
   footer.appendChild(footerTitle);
   footer.appendChild(speckleText);
