@@ -187,7 +187,7 @@ export class Navigation extends Extension {
   }
   private addOrientButton(cameraController: any, filtering: any) {
     const orientButton = document.createElement("button");
-    this.addButton(orientButton, "./icons/Fit.html");
+    this.addButton(orientButton, "./icons/ViewToPlan.svg");
 
     const selection = this.viewer.createExtension(CustomSelectionExtension);
     selection.enabled = true;
