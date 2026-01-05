@@ -3,7 +3,7 @@ import {
   IViewer,
   TreeNode,
   GeometryType,
-  LineBatch,
+  LineBatch
 } from "@speckle/viewer";
 import { Vector2, Color } from "three";
 
@@ -69,35 +69,39 @@ export class Styles extends Extension {
             material.pixelThreshold = 0.5;
             material.resolution = new Vector2();
 
-            if (profile.displayStyle.linetype === "Dash") {
+            if (profile.displayStyle.linetype === "Solid") {
+              material.dashed = false;
+            }
+
+            else if (profile.displayStyle.linetype === "Dash") {
               material.dashed = true;
               material.dashScale = dashScale;
               material.dashSize = 1;
               material.gapSize = 1;
             }
 
-            if (profile.displayStyle.linetype === "Dot") {
+            else if (profile.displayStyle.linetype === "Dot") {
               material.dashed = true;
               material.dashScale = dashScale;
               material.dashSize = 0.2;
               material.gapSize = 0.2;
             }
 
-            if (profile.displayStyle.linetype === "DashDot") {
+            else if (profile.displayStyle.linetype === "DashDot") {
               material.dashed = true;
               material.dashScale = dashScale;
               material.dashSize = 2;
               material.gapSize = 0.4;
             }
 
-            if (profile.displayStyle.linetype === "DashDotDot") {
+            else if (profile.displayStyle.linetype === "DashDotDot") {
               material.dashed = true;
               material.dashScale = dashScale;
               material.dashSize = 1.5;
               material.gapSize = 0.6;
             }
 
-            if (profile.displayStyle.linetype === "Continuous") {
+            else if (profile.displayStyle.linetype === "Continuous") {
               material.dashed = true;
               material.dashScale = dashScale;
               material.dashSize = 0.5;
