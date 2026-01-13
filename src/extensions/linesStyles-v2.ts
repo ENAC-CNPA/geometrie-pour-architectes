@@ -1,6 +1,6 @@
-//README: ce fichier à partir de l'algo de Alex fonctionne presque.
-//Problème il pollue le fichier montrer/cacher convertToTexture, en affichant toujours la même (de la dernière esquisse)
-//A priori, c'est peut-être car les ids des lignes dont on édite les batchs changent
+//README: ce fichier à partir de l'algorithme de Alex fonctionne presque.
+//Problème il pollue les fonctions montrer/cacher les cotes et les ensembles,
+//en changeant l'id de l'objet parent des lignes modifiées
 // 
 import {
   Extension,
