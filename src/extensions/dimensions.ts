@@ -58,6 +58,7 @@ export class Dimensions extends Extension {
       (event: SelectionEvent | null) => {
         if (!event) return;
         const doubleClickedNode = event.hits[0].node;
+        console.log(doubleClickedNode)
         if (doubleClickedNode.parent.model.raw.isSketch === true) {
           const parentCollection = doubleClickedNode.parent;
           const dimensionsProfiles = parentCollection.model.raw.Profiles.filter(
