@@ -1,0 +1,7 @@
+Newton: Principia, I,5: Lemma 22 and Propositions XXV and XXVI. Model by Bernard Cache
+Step 1: 2920, 2564, 2750, 2642, 2742, 2607, 2940, 2601, 2542, 2519 = 2682.7
+Step 2: 420, 397, 410, 435, 412, 424, 388, 531, 406, 422 = 424.5
+
+Derand: Voûte d'arêtes en tour ronde et rampante. Model by Raphaël Vouilloz
+Step 1: 7942, 7262, 7029, 7959, 7420, 8004, 7487, 7494, 7600, 7691 = 7588.8
+Step 2: 76, 79, 88, 99, 99, 97, 94, 96, 83, 97 = 90.8
