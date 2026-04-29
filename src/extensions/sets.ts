@@ -48,7 +48,7 @@ export class Sets extends Extension {
         console.log(child)
       }
     }
-      */
+    */
     return topSolidReceivedItems;
   }
 
@@ -56,7 +56,7 @@ export class Sets extends Extension {
   private isolateTopSolidMainSets(): any[] {
     const topSolidReceivedItems = this.receiveTopSolidItems();
     const topSolidMainSets = topSolidReceivedItems.filter(
-      (item: any) => item.raw.isSet === true
+      (item: any) => item.raw.isSet === true,
     );
     return topSolidMainSets;
   }
@@ -99,7 +99,7 @@ export class Sets extends Extension {
           item.raw["referenced obj id"],
           item.raw.isSet,
           item.raw.name,
-          item.raw.elements //again, these are ids of reference
+          item.raw.elements, //again, these are ids of reference
         );
         inSetsItems.push(attributes);
         /**if set, loop the same function inside it to get its own children too */
@@ -167,7 +167,7 @@ export class Sets extends Extension {
       let elements = item[5];
       for (const element of elements) {
         const relatedItem = allItems.find(
-          (subarray: any) => subarray[1] === element.referencedId
+          (subarray: any) => subarray[1] === element.referencedId,
         );
         setTree.push(relatedItem);
         /**if set, loop the same function inside it to get its own elements too */
@@ -215,7 +215,7 @@ export class Sets extends Extension {
     function populateList(
       set: any[], //topSolidItem[],
       listParent: HTMLUListElement | HTMLLIElement,
-      listLevel: number
+      listLevel: number,
     ) {
       const items = set[6];
       for (const item of items) {
@@ -237,7 +237,7 @@ export class Sets extends Extension {
           /**Store the id finding the correspondence between applicationId (topsolid) and speckleid (or id)*/
           const applicationId = item[2].toString();
           const correspondencePair = correspondences.find(
-            (pair) => pair[1] === applicationId
+            (pair) => pair[1] === applicationId,
           );
           if (correspondencePair) {
             const speckleId = correspondencePair[0];
@@ -254,7 +254,7 @@ export class Sets extends Extension {
   /**Add expand buttons to sets*/
   private addExpandButtons() {
     const setsContainer = document.getElementById(
-      "sets-container"
+      "sets-container",
     ) as HTMLElement;
     const listSets = setsContainer.getElementsByClassName("set");
     for (const listSet of listSets) {
@@ -264,7 +264,7 @@ export class Sets extends Extension {
       listSet.prepend(expandButton);
       expandButton.onclick = () => {
         const liChildren = Array.from(listSet.children).filter(
-          (child) => child.tagName.toLowerCase() === "li"
+          (child) => child.tagName.toLowerCase() === "li",
         ) as HTMLLIElement[];
         const shouldExpand = expandButton.value === "+";
         expandButton.value = shouldExpand ? "-" : "+";
@@ -279,10 +279,10 @@ export class Sets extends Extension {
   private addCheckboxes() {
     this.addExpandButtons();
     const setsContainer = document.getElementById(
-      "sets-container"
+      "sets-container",
     ) as HTMLElement;
     const listItems = Array.from(
-      setsContainer.getElementsByClassName("list-item")
+      setsContainer.getElementsByClassName("list-item"),
     ) as HTMLLIElement[];
     for (const listItem of listItems) {
       const checkbox = document.createElement("input");
@@ -298,17 +298,17 @@ export class Sets extends Extension {
     const parentLi = listItem.parentElement as HTMLLIElement;
     if (parentLi.classList.contains("list-item")) {
       const parentCheckbox = parentLi.querySelector(
-        'input[type="checkbox"]'
+        'input[type="checkbox"]',
       ) as HTMLInputElement;
       const brothersLi = Array.from(parentLi.children).filter(
-        (child) => child.tagName.toLowerCase() === "li"
+        (child) => child.tagName.toLowerCase() === "li",
       );
       const totalLiCount = brothersLi.length;
       let checkedCount = 0;
       let indeterminateChildren = false;
       brothersLi.forEach((li) => {
         const checkbox = li.querySelector(
-          'input[type="checkbox"]'
+          'input[type="checkbox"]',
         ) as HTMLInputElement;
         if (checkbox.checked) {
           checkedCount++;
@@ -339,14 +339,14 @@ export class Sets extends Extension {
     checkbox: HTMLInputElement,
     listItems: HTMLLIElement[],
     listItem: HTMLLIElement,
-    speckleId: string
+    speckleId: string,
   ) {
     const isChecked = checkbox.checked;
     const twinListItems = listItems.filter((item) => item !== listItem);
     for (const twinListItem of twinListItems) {
       if (twinListItem.getAttribute("data-speckleid") === speckleId) {
         const twinCheckbox = twinListItem.querySelector(
-          'input[type="checkbox"]'
+          'input[type="checkbox"]',
         ) as HTMLInputElement;
         twinCheckbox.checked = isChecked;
         this.updateParentsCheckboxes(twinListItem);
@@ -358,7 +358,7 @@ export class Sets extends Extension {
   private showOrHideObject(
     speckleId: string,
     checkbox: HTMLInputElement,
-    filtering: any
+    filtering: any,
   ) {
     const isFrame = this.viewer.getWorldTree().findId(speckleId)![0].model.raw
       .IsFrame as string | null;
@@ -405,7 +405,7 @@ export class Sets extends Extension {
   /**Show/hide CSS2D labels = pointIcons, nominations, dimensionStexts */
   private showOrHideCSS2D(shouldVisible: boolean, speckleId: string) {
     const nominations = document.getElementsByClassName(
-      "nomination-id-" + speckleId
+      "nomination-id-" + speckleId,
     );
     for (const nomination of nominations) {
       (nomination as HTMLElement).style.visibility = shouldVisible
@@ -413,7 +413,7 @@ export class Sets extends Extension {
         : "hidden";
     }
     const pointsIcons = document.getElementsByClassName(
-      "point-icon-id-" + speckleId
+      "point-icon-id-" + speckleId,
     );
     for (const pointIcon of pointsIcons) {
       (pointIcon as HTMLElement).style.visibility = shouldVisible
@@ -421,7 +421,7 @@ export class Sets extends Extension {
         : "hidden";
     }
     const dimensionsTexts = document.getElementsByClassName(
-      "dimension-text-id-" + speckleId
+      "dimension-text-id-" + speckleId,
     );
     for (const dimensionText of dimensionsTexts) {
       (dimensionText as HTMLElement).style.visibility = "hidden";
@@ -448,7 +448,7 @@ export class Sets extends Extension {
     checkbox: HTMLInputElement,
     listItems: HTMLLIElement[],
     topSolidReceivedItems: any[],
-    filtering: any[]
+    filtering: any[],
   ) {
     if (listItem.classList.contains("object")) {
       const speckleId = listItem.dataset.speckleid as string | undefined;
@@ -462,11 +462,11 @@ export class Sets extends Extension {
       checkbox.indeterminate = false;
       /**Sets checkbox behavior = iterate the function on its children */
       const subLis = Array.from(listItem.children).filter(
-        (child) => child.tagName.toLowerCase() === "li"
+        (child) => child.tagName.toLowerCase() === "li",
       ) as HTMLLIElement[];
       for (const subLi of subLis) {
         const subliCheckbox = subLi.querySelector(
-          'input[type="checkbox"]'
+          'input[type="checkbox"]',
         ) as HTMLInputElement;
         /**Propagate the state of the clicked checkboxes to the children */
         subliCheckbox.checked = checkbox.checked;
@@ -476,7 +476,7 @@ export class Sets extends Extension {
           subliCheckbox,
           listItems,
           topSolidReceivedItems,
-          filtering
+          filtering,
         );
       }
     }
@@ -487,14 +487,14 @@ export class Sets extends Extension {
     this.addCheckboxes();
     const topSolidReceivedItems = this.receiveTopSolidItems();
     const setsContainer = document.getElementById(
-      "sets-container"
+      "sets-container",
     ) as HTMLElement;
     const listItems = Array.from(
-      setsContainer.getElementsByClassName("list-item")
+      setsContainer.getElementsByClassName("list-item"),
     ) as HTMLLIElement[];
     for (const listItem of listItems) {
       const checkbox = listItem.querySelector(
-        'input[type="checkbox"]'
+        'input[type="checkbox"]',
       ) as HTMLInputElement;
       checkbox.addEventListener("change", () => {
         /**updateParentsCheckboxes can be ran directly on the checked list item, we don't need to iterate it on children */
@@ -505,7 +505,7 @@ export class Sets extends Extension {
           checkbox,
           listItems,
           topSolidReceivedItems,
-          filtering
+          filtering,
         );
       });
     }
@@ -515,7 +515,7 @@ export class Sets extends Extension {
   private reverseList() {
     function reverseSubListItems(listElement: HTMLLIElement) {
       const subListItems: HTMLLIElement[] = Array.from(
-        listElement.children
+        listElement.children,
       ).filter((child): child is HTMLLIElement => child.tagName === "LI");
       for (let i = subListItems.length - 1; i >= 0; i--) {
         listElement.appendChild(subListItems[i]);
@@ -528,7 +528,7 @@ export class Sets extends Extension {
       }
     }
     const firstLi = document.getElementsByClassName(
-      "list-item-level-1"
+      "list-item-level-1",
     )[0] as HTMLLIElement;
     reverseSubListItems(firstLi);
   }
@@ -538,17 +538,17 @@ export class Sets extends Extension {
     const collapseButton = document.createElement("button");
     collapseButton.textContent = "Replier Ensembles";
     const setsContainer = document.getElementById(
-      "sets-container"
+      "sets-container",
     ) as HTMLDivElement;
     setsContainer.prepend(collapseButton);
     const listItems: HTMLLIElement[] = Array.from(
-      setsContainer.getElementsByClassName("list-item")
+      setsContainer.getElementsByClassName("list-item"),
     ).filter(
       (child): child is HTMLLIElement =>
-        !child.classList.contains("list-item-level-1")
+        !child.classList.contains("list-item-level-1"),
     );
     const expandSetButtons: HTMLButtonElement[] = Array.from(
-      setsContainer.querySelectorAll('input[type="button"]')
+      setsContainer.querySelectorAll('input[type="button"]'),
     );
     collapseButton.onclick = () => {
       for (const listItem of listItems) {
@@ -560,6 +560,18 @@ export class Sets extends Extension {
     };
   }
 
+  private computeMetrics() {
+    const topSolidReceivedItems = this.receiveTopSolidItems();
+    console.log(
+      "Number of elements received from Speckle server: ",
+      topSolidReceivedItems.length,
+    );
+    const jsonString = JSON.stringify(topSolidReceivedItems);
+    const sizeInBytes = new TextEncoder().encode(jsonString).length;
+    const sizeInMo = sizeInBytes / (1024 * 1024);
+    console.log("Scene graph (WorldTree) size: ", sizeInMo, "Mo");
+  }
+
   public addSets(filtering: any) {
     this.sortMainsSetsByName();
     this.hideOutSetsItems(filtering);
@@ -567,5 +579,6 @@ export class Sets extends Extension {
     this.clickCheckbox(filtering);
     this.reverseList();
     this.addCollapseSetsButton();
+    this.computeMetrics();
   }
 }
