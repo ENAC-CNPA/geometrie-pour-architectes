@@ -1,15 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400..700&display=swap");
+
 :root {
   --color: #136cff;
 }
-body,
-html {
+* {
   margin: 0;
   padding: 0;
+}
+body,
+html {
   width: 100%;
   height: 100%;
   overflow: hidden;
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* HEADER */
+#index-header {
+  position: relative;
+  height: 40vh;
+  background-color: #3a5055;
+  color: #e0d3c0;
+  padding: 40px 60px;
+  display: flex;
+  align-items: center;
+}
+
+/* BANDEAU NAVIGATION */
+#index-nav {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+}
+#index-nav-list {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+}
+.index-nav-anchor {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  text-decoration: none;
+  color: #e0d3c0;
+  transition: opacity 0.3s;
+}
+
+/* MODELS LIST */
+#models-list {
+  margin: 35px;
+}
+
+/* TITRE */
+#index-title-container {
+  padding-top: 40px;
+  margin-left: 10px;
+}
+#index-title {
+  font-family: "Markazi Text", serif;
+  font-weight: 400; /*400 to 700*/
+  font-size: 80px;
+}
+.index-subtitle {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 30px;
+  max-width: 70vw;
+}
+
+/* FOOTER */
+.footer-logo {
+}
+
+/* VISIONNEUSE */
 #speckle-container {
   position: fixed;
   height: 100%;

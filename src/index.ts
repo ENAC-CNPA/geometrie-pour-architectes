@@ -1,6 +1,10 @@
 import { models } from "./extensions/models.ts";
 
-const modelsList = document.getElementById("models-list") as HTMLUListElement;
+const body = document.body;
+
+const modelsList = document.createElement("ul");
+modelsList.id = "models-list";
+modelsList.textContent = "Models :";
 
 const baseURL = `./viewer.html`;
 for (const model of models) {
@@ -30,3 +34,5 @@ for (const model of models) {
   modelListItem.appendChild(modelSubList);
   modelsList.appendChild(modelListItem);
 }
+
+body.appendChild(modelsList);
