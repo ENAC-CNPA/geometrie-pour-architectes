@@ -1,0 +1,82 @@
+Metrics for IEEE 2026 Paper
+
+Network metrics for the custom viewer
+
+Newton: Principia, I,5: Lemma 22 and Propositions XXV and XXVI. Model by Bernard Cache
+
+22 requests
+6.45 MB / 1.61 MB transferred
+Finish: 5.04 s
+DOMContentLoaded: 176 ms
+load: 779 ms
+
+22 requests
+6.45 MB / 1.61 MB transferred
+Finish: 4.76 s
+DOMContentLoaded: 157 ms
+load: 668 ms
+
+22 requests
+6.45 MB / 1.61 MB transferred
+Finish: 5.42 s
+DOMContentLoaded: 186 ms
+load: 772 ms
+
+22 requests
+6.45 MB / 1.61 MB transferred
+Finish: 4.81 s
+DOMContentLoaded: 159 ms
+load: 685 ms
+
+22 requests
+6.45 MB / 1.61 MB transferred
+Finish: 6.08 s
+DOMContentLoaded: 168 ms
+load: 708 ms
+
+///////////////// AVERAGE:
+22 requests
+6.45 MB / 1.61 MB transferred
+Finish: 5,22 s
+DOMContentLoaded: 169 ms
+load: 722 ms
+
+
+Derand: Voûte d'arêtes en tour ronde et rampante. Model by Raphaël Vouilloz
+
+24 requests
+253.24 MB / 45.78 MB transferred
+Finish: 16.85 s
+DOMContentLoaded: 240 ms
+load: 893 ms
+
+24 requests
+253.78 MB / 45.96 MB transferred
+Finish: 16.05 s
+DOMContentLoaded: 158 ms
+load: 691 ms
+
+24 requests
+253.78 MB / 45.96 MB transferred
+Finish: 15.96 s
+DOMContentLoaded: 160 ms
+load: 684 ms
+
+24 requests
+253.78 MB / 45.96 MB transferred
+Finish: 15.40 s
+DOMContentLoaded: 154 ms
+load: 648 ms
+
+24 requests
+253.78 MB / 45.96 MB transferred
+Finish: 15.55 s
+DOMContentLoaded: 146 ms
+load: 782 ms
+
+///////////////// AVERAGE:
+24 requests
+253.78 MB / 45.96 MB transferred
+Finish: 15,96 s
+DOMContentLoaded: 171 ms
+load: 740 ms

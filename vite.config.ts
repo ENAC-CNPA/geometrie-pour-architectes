@@ -6,6 +6,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: "index.html",
+        main_ieee2026: "index_ieee2026.html",
         viewer: "viewer.html",
       },
     },
