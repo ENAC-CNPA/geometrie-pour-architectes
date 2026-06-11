@@ -37,10 +37,6 @@ async function main() {
   const viewer = new Viewer(speckleContainer);
   await viewer.init();
 
-  /** Compute Metrics (start) */
-  const computeMetrics = viewer.createExtension(ComputeMetrics);
-  computeMetrics.computeMetricsBeforeLoading()
-
   /**Add stock extensions */
   const cameraController = viewer.createExtension(CameraController);
   cameraController.toggleCameras();
@@ -58,10 +54,10 @@ async function main() {
   const threeDNominations = viewer.createExtension(ThreeDNominations);
   const frames = viewer.createExtension(Frames);
   const selectNonSpeckle = viewer.createExtension(SelectNonSpeckle);
+  const computeMetrics = viewer.createExtension(ComputeMetrics);
 
   /**Run custom extensions */
   viewer.on(ViewerEvent.LoadComplete, async () => {
-    computeMetrics.computeMetricsAfterLoading()
     menu.addMenu();
     pointsIconsAndNominations.addPointsIconsAndNominations(filtering);
     threeDNominations.add3DNominations();
@@ -71,7 +67,7 @@ async function main() {
     sets.addSets(filtering);
     navigation.addNavigation(cameraController, filtering);
     dimensions.addDimensions(ViewerEvent, filtering);
-    computeMetrics.computeMetricsAfterExtensions()
+    computeMetrics.computeMetrics()
   });
 
   /** Create a loader for the speckle stream */

@@ -1,6 +1,56 @@
-Metrics for IEEE 2026 Paper
+Metrics for IEEE 2026 Paper (Table 1)
 
-Network metrics for the custom viewer
+--------------------------------------
+
+RESULTS:
+
+-------------
+
+Number of geometries 358 124
+Data size (TopSolid) 1.91 MB 58.88 MB
+Scene graph size 4.43 MB 2.82 MB
+Number of Requests 22 24
+Resource Size 6.45 MB 253.78 MB
+Transferred Data 1.61 MB 45.96 MB
+Finish 5.04 s 15,96 s
+DOMContentLoaded 168 ms 158 ms
+Load 708 ms 691 ms
+Idle FPS 58.8 58.8
+Navigation FPS 55.5 27.7
+
+Model A = Newton: Principia, I,5: Lemma 22 and Propositions XXV and XXVI
+Model B = Derand: Voûte d’arêtes en tour ronde et rampante
+
+MB = megabytes, s = seconds, ms = milliseconds
+
+--------------------------------------
+
+DETAILS :
+
+-------------
+
+Number of geometries = computed in extension sets.ts -> computeMetrics()
+Data size (TopSolid) = size of the TopSolid export package
+Scene graph size = computed in extension sets.ts -> computeMetrics()
+
+-------------
+
+FPS = computed in extension metrics.ts using stats.js
+ 
+Model A : 
+Idle FPS : 62.5 58.8 58.8 58.8 58.8 -> 58.8
+Navigation FPS : 55.5 55.5 55.5 -> 55.5
+
+Model B :
+Idle FPS : 58.8 58.8 58.8 -> 58.8
+Navigation FPS : 27.0 26.3 29.4 29.4 27.7 -> 27.7
+
+-------------
+
+Other data = Network metrics for the custom viewer (directly in the browser network monitor):
+Loaded 5 times
+
+-----
 
 Newton: Principia, I,5: Lemma 22 and Propositions XXV and XXVI. Model by Bernard Cache
 
@@ -35,12 +85,21 @@ DOMContentLoaded: 168 ms
 load: 708 ms
 
 ///////////////// AVERAGE:
+STABLE:
 22 requests
 6.45 MB / 1.61 MB transferred
+
+MEAN:
 Finish: 5,22 s
 DOMContentLoaded: 169 ms
 load: 722 ms
 
+MEDIAN:
+Finish: 5,04 s
+DOMContentLoaded: 168 ms
+load: 708 ms
+
+-----
 
 Derand: Voûte d'arêtes en tour ronde et rampante. Model by Raphaël Vouilloz
 
@@ -75,8 +134,29 @@ DOMContentLoaded: 146 ms
 load: 782 ms
 
 ///////////////// AVERAGE:
+STABLE:
 24 requests
 253.78 MB / 45.96 MB transferred
+
+MEAN:
 Finish: 15,96 s
 DOMContentLoaded: 171 ms
 load: 740 ms
+
+MEDIAN:
+Finish: 15,96 s
+DOMContentLoaded: 158 ms
+load: 691 ms
+
+------------------------------------
+
+SECOND (ON FOUR) SUBMISSION (ARCHIVE):
+Using console.timeEnd before loading, after loading and after extensions
+
+Newton: Principia, I,5: Lemma 22 and Propositions XXV and XXVI. Model by Bernard Cache
+Step 1: 2920, 2564, 2750, 2642, 2742, 2607, 2940, 2601, 2542, 2519 = 2682.7
+Step 2: 420, 397, 410, 435, 412, 424, 388, 531, 406, 422 = 424.5
+
+Derand: Voûte d'arêtes en tour ronde et rampante. Model by Raphaël Vouilloz
+Step 1: 7942, 7262, 7029, 7959, 7420, 8004, 7487, 7494, 7600, 7691 = 7588.8
+Step 2: 76, 79, 88, 99, 99, 97, 94, 96, 83, 97 = 90.8
